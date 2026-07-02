@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버니스 실력 향상 테스트 결과</title>
+    <style>
+        :root {
+            --primary-color: #1a237e; /* 요청하신 인디고 블루 컬러 */
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --gray-text: #666666;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--gray-text);
+            font-size: 1.1rem;
+        }
+
+        /* 기준 안내 섹션 */
+        .info-section {
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .info-item strong {
+            color: var(--primary-color);
+        }
+
+        /* 테이블 섹션 */
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        .name-tag {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .exempt-text {
+            color: #999999;
+            font-style: italic;
+        }
+
+        /* 미참여자 섹션 */
+        .untested-section {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .untested-section h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .untested-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .untested-item {
+            background-color: #f1f3f5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            color: #495057;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🏀 버니스 실력 향상 테스트</h1>
+        <p><strong>1회차 기록 (5월 16일)</strong> · 3개월 주기 측정</p>
+    </header>
+
+    <div class="info-section">
+        <h3>🎯 항목별 목표 기준</h3>
+        <div class="info-grid">
+            <div class="info-item"><strong>골밑슛:</strong> 10개 중 5개 이상</div>
+            <div class="info-item"><strong>자유투:</strong> 5개 중 2개 이상</div>
+            <div class="info-item"><strong>드리블 셔틀런:</strong> 1분 17초 이내</div>
+            <div class="info-item"><strong>45도 패스 캐치:</strong> 7번 중 5번 이상</div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>드리블 셔틀런</th>
+                    <th>골밑슛 (양쪽)</th>
+                    <th>자유투</th>
+                    <th>45도 패스 캐치</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="name-tag">영우</td>
+                    <td>1' 15"</td>
+                    <td>6 / 10</td>
+                    <td>1 / 5</td>
+                    <td>7 / 7</td>
+                </tr>
+                <tr>
+                    <td class="name-tag">담비</td>
+                    <td>1' 16"</td>
+                    <td>6 / 10</td>
+                    <td>1 / 5</td>
+                    <td>7 / 7</td>
+                </tr>
+                <tr>
+                    <td class="name-tag">구원</td>
+                    <td>1' 10"</td>
+                    <td>7 / 10</td>
+                    <td>3 / 5</td>
+                    <td>7 / 7</td>
+                </tr>
+                <tr>
+                    <td class="name-tag">유정</td>
+                    <td>1' 28"</td>
+                    <td>6 / 10</td>
+                    <td>1 / 5</td>
+                    <td>7 / 7</td>
+                </tr>
+                <tr>
+                    <td class="name-tag">지수</td>
+                    <td>1' 11"</td>
+                    <td>10 / 10</td>
+                    <td>2 / 5</td>
+                    <td><span class="exempt-text">면제</span></td>
+                </tr>
+                <tr>
+                    <td class="name-tag">신애</td>
+                    <td>1' 19"</td>
+                    <td>6 / 10</td>
+                    <td>2 / 5</td>
+                    <td>6 / 7</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="untested-section">
+        <h3>미참여자 명단 (추후 테스트 예정)</h3>
+        <ul class="untested-list">
+            <li class="untested-item">민정</li>
+            <li class="untested-item">선일</li>
+            <li class="untested-item">민영</li>
+            <li class="untested-item">은혜</li>
+            <li class="untested-item">아코</li>
+            <li class="untested-item">선민</li>
+            <li class="untested-item">슬기</li>
+            <li class="untested-item">시연</li>
+            <li class="untested-item">유지</li>
+            <li class="untested-item">성은</li>
+            <li class="untested-item">주원</li>
+            <li class="untested-item">지혜</li>
+            <li class="untested-item">진서</li>
+            <li class="untested-item">찬영</li>
+            <li class="untested-item">선오</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
