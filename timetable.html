@@ -2,98 +2,211 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>꿀차툰 주간 타임테이블</title>
   <style>
+    :root {
+      --primary: #2D6A4F;      /* 딥 포레스트 그린 */
+      --primary-light: #E8F5E9;/* 소프트 세이지 그린 */
+      --accent: #E07A5F;       /* 코랄 브릭 (포인트) */
+      --accent-light: #FDF2E9; /* 부드러운 코랄 배경 */
+      --text: #2B2D42;         /* 쿨 차콜 텍스트 */
+      --text-sub: #52796F;     /* 차분한 서브 텍스트 */
+      --border: #C8E6C9;       /* 소프트 그린 보더 */
+      --bg: #F4F7F4;           /* 청량한 쿨 그레이 배경 */
+      --card-bg: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", Roboto, "Noto Sans KR", sans-serif;
-      color: #4A3B32;
-      background-color: #FAFAFA;
-      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", Roboto, sans-serif;
+      color: var(--text);
+      background-color: var(--bg);
+      padding: 12px;
       line-height: 1.5;
     }
+
     .container {
-      max-width: 1000px;
+      max-width: 600px;
       margin: 0 auto;
     }
-    .rule-box {
-      background-color: #FFF9E6;
-      border: 1px solid #F39C12;
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 24px;
+
+    /* 뷰 전환 버튼 */
+    .tab-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+      background-color: var(--bg);
+      padding-bottom: 4px;
     }
-    .section-title {
-      font-size: 1.15em;
-      font-weight: bold;
-      color: #D35400;
-      margin-top: 30px;
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      border: 1px solid var(--primary);
+      background: var(--card-bg);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.95em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 10px rgba(45, 106, 79, 0.2);
+    }
+
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    /* 요일별 카드 및 아코디언 */
+    .day-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .day-header {
+      padding: 14px 16px;
+      background: var(--primary-light);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.05em;
+    }
+
+    .day-header::-webkit-details-marker {
+      display: none;
+    }
+
+    .day-header .tag {
+      font-size: 0.78em;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: #FFFFFF;
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+
+    .day-content {
+      padding: 12px 14px;
+    }
+
+    .time-slot {
+      padding: 10px 0;
+      border-bottom: 1px dashed #E0E0E0;
+    }
+
+    .time-slot:last-child {
+      border-bottom: none;
+    }
+
+    .time-title {
+      font-size: 0.82em;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .time-title .badge {
+      background: var(--primary);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    .task-desc {
+      font-size: 0.93em;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .sub-note {
+      font-size: 0.83em;
+      color: #666;
+      margin-top: 4px;
+      line-height: 1.4;
+      background: var(--bg);
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+
+    .buffer-box {
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: var(--accent-light);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      font-size: 0.82em;
+      color: #8D4024;
+    }
+
+    /* 전체 시간표 (모바일 2단 배치 카드) */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
       margin-bottom: 12px;
     }
-    .table-wrapper {
-      overflow-x: auto;
-      margin-bottom: 30px;
-      background: #FFFFFF;
+
+    .grid-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
+
+    .grid-card-title {
       font-size: 0.9em;
+      font-weight: 700;
+      color: var(--primary);
+      border-bottom: 1.5px solid var(--primary-light);
+      padding-bottom: 4px;
+      margin-bottom: 6px;
     }
-    th {
-      background-color: #F39C12;
-      color: #FFFFFF;
-      padding: 10px 12px;
-      border: 1px solid #E67E22;
-      font-weight: 600;
+
+    .common-routine-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
     }
-    th.ver2-th {
-      background-color: #D35400;
-    }
-    td {
-      padding: 10px 12px;
-      border: 1px solid #FAD7A1;
-      vertical-align: top;
-    }
-    .row-light {
-      background-color: #FFFDF7;
-    }
-    .row-white {
-      background-color: #FFFFFF;
-    }
-    .time-col {
-      font-weight: bold;
-      background-color: #FFF9E6;
-      white-space: nowrap;
-    }
-    .day-col {
-      font-weight: bold;
-      text-align: center;
-      background-color: #FFF9E6;
-      width: 60px;
-    }
-    details {
-      margin-top: 4px;
-    }
-    summary {
-      cursor: pointer;
-      font-weight: bold;
-      color: #D35400;
-      outline: none;
-    }
-    .toggle-content {
-      margin-top: 6px;
-      padding: 8px 10px;
-      background-color: #FFF9E6;
-      border-radius: 4px;
+
+    .common-title {
       font-size: 0.88em;
-      line-height: 1.4;
-    }
-    .highlight-red {
-      color: #C0392B;
-      font-size: 0.85em;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
     }
   </style>
 </head>
@@ -101,266 +214,283 @@
 
 <div class="container">
 
-  <!-- 완충 룰 상단 토글 -->
-  <div class="rule-box">
-    <details open>
-      <summary>🍯 반드시 기억해야 할 3대 완충 룰 (클릭하여 접기/열기)</summary>
-      <div class="toggle-content">
-        • <b>월요일 23:00 셧다운:</b> 화요일 오전 기상을 위해 유튜브 편집은 23:00에 무조건 종료하고 취침을 준비합니다.<br>
-        • <b>화요일 외출 방어권:</b> 서울 미팅(17시 출발)이 발생한 주는, 목요일 딥워크를 온전히 '꿀차툰 완결'에만 투입합니다.<br>
-        • <b>수요일 에너지 세이브:</b> 야간 농구가 있는 날은 19시 식사 후 21시 이동 전까지 누워서 뇌를 완전히 쉬어줍니다.<br>
-        • <b>타이머 엄수:</b> 13:30 인스타 소통은 20분 타이머가 울리면 댓글이 남아도 즉시 닫고 딥워크로 전환합니다.
+  <!-- 뷰 전환 탭 -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchView('view-daily')">📅 요일별 시간표</button>
+    <button class="tab-btn" onclick="switchView('view-all')">📊 전체 한눈에 보기</button>
+  </div>
+
+  <!-- [버전 1] 요일별 세로 아코디언 시간표 -->
+  <div id="view-daily" class="view-section active">
+
+    <!-- 월요일 -->
+    <details class="day-card">
+      <summary class="day-header">
+        <span>월요일 (한해지도 집중 드로잉)</span>
+        <span class="tag">주간회의 / 편집</span>
+      </summary>
+      <div class="day-content">
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">10:00-12:00</span> 오전 기획</div>
+          <div class="task-desc">[고정] 친구와 주간회의</div>
+          <div class="sub-note">주간 목표 설정, 지표 점검 및 역할 배분 확인</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">12:00-14:00</span> 점심 & 전환</div>
+          <div class="task-desc">12~13시 식사/설거지 ➔ 13~14시 택배/인스타/세팅</div>
+          <div class="sub-note">• 13:30 인스타 소통은 20분 타이머 엄수</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">14:00-19:00</span> 🔥 메인 딥워크</div>
+          <div class="task-desc">[한해지도] 메인 일러스트 집중 드로잉 (5h)</div>
+          <div class="sub-note">• 18:45 내일 첫 5분에 손댈 선화 살짝 남기고 저장</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">20:00-23:00</span> 야간 일정</div>
+          <div class="task-desc">유튜브 컷편집</div>
+          <div class="buffer-box">⚡ <b>완충 룰:</b> 수면 패턴 유지를 위해 23:00에 무조건 화면 셧다운</div>
+        </div>
       </div>
     </details>
+
+    <!-- 화요일 -->
+    <details class="day-card">
+      <summary class="day-header">
+        <span>화요일 (꿀차툰 선화 & 광고 기획)</span>
+        <span class="tag">서울 외출 후보</span>
+      </summary>
+      <div class="day-content">
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">10:00-12:00</span> 오전 루틴 & 광고</div>
+          <div class="task-desc">메일/일정확인 (30m) ➔ [광고툰] 기획/스크립트 (1.5h)</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">12:00-14:00</span> 점심 & 전환</div>
+          <div class="task-desc">12~13시 식사/설거지 ➔ 13~14시 택배/인스타/세팅</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">14:00-19:00</span> 🔥 메인 딥워크</div>
+          <div class="task-desc">[꿀차툰] 일상툰 콘티 & 선화 드로잉 (5h)</div>
+          <div class="buffer-box">⚡ <b>완충 룰:</b> 서울 미팅(17시 출발) 발생 시 17:00 조기 마감 후 이동 (부족한 분량은 목요일에 보충)</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">20:00 이후</span> 야간 일정</div>
+          <div class="task-desc">서울 약속/미팅 OR 유튜브 보충 편집</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 수요일 -->
+    <details class="day-card">
+      <summary class="day-header">
+        <span>수요일 (한해지도 채색 & 심리모임)</span>
+        <span class="tag">격주 농구 🏀</span>
+      </summary>
+      <div class="day-content">
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">10:00-12:00</span> 오전 루틴 & 신규캐시</div>
+          <div class="task-desc">메일/일정확인 (30m) ➔ [신규캐시] 심리모임 기획 (1.5h)</div>
+          <div class="sub-note">걱정안냥 워크북 기반 4~6인 파일럿 커리큘럼 뼈대</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">12:00-14:00</span> 점심 & 전환</div>
+          <div class="task-desc">12~13시 식사/설거지 ➔ 13~14시 택배/인스타/세팅</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">14:00-19:00</span> 🔥 메인 딥워크</div>
+          <div class="task-desc">[한해지도] 지도 채색 & 스티커/봉투 규격 작업 (5h)</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">20:00-24:00</span> 야간 일정</div>
+          <div class="task-desc">[격주 A] 농구학원 (21~24시) OR [격주 B] 유튜브 편집</div>
+          <div class="buffer-box">⚡ <b>완충 룰:</b> 농구 날은 19시 식사 후 21시 이동 전까지 누워서 뇌를 완전히 휴식</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 목요일 -->
+    <details class="day-card">
+      <summary class="day-header">
+        <span>목요일 (꿀차툰 마감 & 깨굴 미팅)</span>
+        <span class="tag">깨굴 회의 🎬</span>
+      </summary>
+      <div class="day-content">
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">10:00-12:00</span> 오전 루틴 & 광고</div>
+          <div class="task-desc">메일/일정확인 (30m) ➔ [광고툰] 그림 콘티 제작 (1.5h)</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">12:00-14:00</span> 점심 & 전환</div>
+          <div class="task-desc">12~13시 식사/설거지 ➔ 13~14시 택배/인스타/세팅</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">14:00-18:00</span> 🔥 메인 딥워크</div>
+          <div class="task-desc">[꿀차툰] 채색 마감 & 업로드 (4h)</div>
+          <div class="sub-note">• 18:00 칼퇴 후 깨굴 미팅 합류</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">18:00-21:00</span> 저녁 & 야간</div>
+          <div class="task-desc">[고정] 깨굴 회의 (저녁식사 + 숏폼/기획 + 촬영)</div>
+          <div class="sub-note">21:00 이후 완전 휴식 모드 전환</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 금요일 -->
+    <details class="day-card">
+      <summary class="day-header">
+        <span>금요일 (한해지도 발주 검수 & 마감)</span>
+        <span class="tag">고정 농구 🏀</span>
+      </summary>
+      <div class="day-content">
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">10:00-12:00</span> 오전 루틴 & 마감</div>
+          <div class="task-desc">메일/일정 (30m) ➔ 신청폼 세팅 & 주간 행정/정산 (1.5h)</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">12:00-14:00</span> 점심 & 전환</div>
+          <div class="task-desc">12~13시 식사/설거지 ➔ 13~14시 택배/인스타/세팅</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">14:00-19:00</span> 🔥 메인 딥워크</div>
+          <div class="task-desc">[한해지도] 최종 발주 패키징 검수 & 잔여 작업 마감 (5h)</div>
+        </div>
+        <div class="time-slot">
+          <div class="time-title"><span class="badge">21:00-24:00</span> 야간 일정</div>
+          <div class="task-desc">[21:00 ~ 24:00] 농구학원 🏀</div>
+          <div class="sub-note">운동 종료 후 주말 완전 휴식 모드 전환</div>
+        </div>
+      </div>
+    </details>
+
   </div>
 
-  <!-- 버전 1: 가로 배치형 -->
-  <div class="section-title">버전 1. 시간대별 통합형 (요일 가로 배치)</div>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>시간대</th>
-          <th>월</th>
-          <th>화</th>
-          <th>수</th>
-          <th>목</th>
-          <th>금</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="row-light">
-          <td class="time-col">10:00 - 12:00<br>(오전 루틴)</td>
-          <td><b>[고정] 주간회의</b><br>(친구와 R&R 점검)</td>
-          <td>
-            메일/일정 (30m)<br><b>광고툰 기획</b> (1.5h)
-            <details>
-              <summary>상세</summary>
-              <div class="toggle-content">아이디어 스크립트 작성 및 광고주 1차 송부</div>
-            </details>
-          </td>
-          <td>
-            메일/일정 (30m)<br><b>신규캐시 기획</b> (1.5h)
-            <details>
-              <summary>상세</summary>
-              <div class="toggle-content">심리 독서모임·워크북 파일럿 뼈대 기획</div>
-            </details>
-          </td>
-          <td>
-            메일/일정 (30m)<br><b>광고툰 콘티</b> (1.5h)
-            <details>
-              <summary>상세</summary>
-              <div class="toggle-content">피드백 반영 그림 콘티 제작 및 2차 송부</div>
-            </details>
-          </td>
-          <td>
-            메일/일정 (30m)<br><b>신규/마감</b> (1.5h)
-            <details>
-              <summary>상세</summary>
-              <div class="toggle-content">모임 신청폼 세팅 및 주간 행정·정산 마감</div>
-            </details>
-          </td>
-        </tr>
-        <tr class="row-white">
-          <td class="time-col">12:00 - 14:00<br>(전환 세팅)</td>
-          <td colspan="5">
-            <details>
-              <summary>점심 및 오후 딥워크 진입 3단계 루틴 확인하기</summary>
-              <div class="toggle-content">
-                • <b>12:00 - 13:00</b> : 점심 식사 준비, 식사, 설거지 및 주방 정리<br>
-                • <b>13:00 - 13:30</b> : 우체국/편의점 택배 발송 (없는 날은 책상 정리)<br>
-                • <b>13:30 - 13:50</b> : 꿀단지 인스타 스토리/댓글 소통 (20분 타이머 알람 엄수)<br>
-                • <b>13:50 - 14:00</b> : 오후 작업 캔버스 전체화면 세팅
-              </div>
-            </details>
-          </td>
-        </tr>
-        <tr class="row-light">
-          <td class="time-col">14:00 - 19:00<br>(🔥 딥워크)</td>
-          <td>
-            <b>[한해지도]</b><br>메인 일러스트 드로잉 (5h)
-            <details>
-              <summary>체크</summary>
-              <div class="toggle-content">18:45 미완성 트리거(선화 살짝 남기기) 저장</div>
-            </details>
-          </td>
-          <td>
-            <b>[꿀차툰]</b><br>일상툰 콘티 & 선화 (5h)<br>
-            <span class="highlight-red">*서울 외출 시 17:00 마감</span>
-          </td>
-          <td>
-            <b>[한해지도]</b><br>채색 & 봉투/스티커 규격 (5h)
-            <details>
-              <summary>체크</summary>
-              <div class="toggle-content">18:45 미완성 트리거 저장 후 19시 마감</div>
-            </details>
-          </td>
-          <td>
-            <b>[꿀차툰]</b><br>채색 마감 & 업로드 (4h)<br>
-            <span class="highlight-red">*18:00 마감 후 깨굴 미팅</span>
-          </td>
-          <td>
-            <b>[한해지도/보충]</b><br>최종 발주 패키징 & 잔여 작업 (5h)
-            <details>
-              <summary>체크</summary>
-              <div class="toggle-content">18:45 주간 마감 완료 후 야간 농구 준비</div>
-            </details>
-          </td>
-        </tr>
-        <tr class="row-white">
-          <td class="time-col">19:00 - 20:00<br>(저녁/마감)</td>
-          <td>저녁 식사 & 휴식</td>
-          <td>저녁 식사<br>(외출 시 서울 이동)</td>
-          <td>저녁 식사 후 휴식<br>(농구 전 뇌 이완)</td>
-          <td><b>깨굴 미팅 합류</b><br>(저녁 식사 & 수다)</td>
-          <td>저녁 식사 후 휴식<br>(농구 전 이완)</td>
-        </tr>
-        <tr class="row-light">
-          <td class="time-col">20:00 이후<br>(야간 일정)</td>
-          <td><b>유튜브 편집</b><br>(20:00~23:00 셧다운)</td>
-          <td><b>서울 미팅/외출</b><br>OR 유튜브 편집</td>
-          <td><b>농구학원 🏀</b><br>OR 유튜브 편집</td>
-          <td><b>깨굴 유튜브 회의 🎬</b><br>(~21:00 종료 후 휴식)</td>
-          <td><b>농구학원 🏀</b><br>(21:00~24:00)</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <!-- [버전 2] 전체 한눈에 보기 (모바일 최적화 2단 카드) -->
+  <div id="view-all" class="view-section">
 
-  <!-- 버전 2: 세로 배치형 -->
-  <div class="section-title">버전 2. 요일별 독립형 (요일 세로 배치)</div>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th class="ver2-th">요일</th>
-          <th class="ver2-th">오전 (10:00~12:00)</th>
-          <th class="ver2-th">오후 딥워크 (14:00~19:00)</th>
-          <th class="ver2-th">야간 (20:00 이후)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="row-light">
-          <td class="day-col">월</td>
-          <td>
-            <b>[고정] 친구 주간회의</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">주간 목표 설정, 걱정안냥 지표 점검, 역할 배분 확인</div>
-            </details>
-          </td>
-          <td>
-            <b>[한해지도] 메인 지도 일러스트 집중 드로잉 (5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">단일 캔버스 집중 드로잉 / 18:45 내일 첫 5분 작업 남겨두고 퇴근</div>
-            </details>
-          </td>
-          <td>
-            <b>유튜브 컷편집 (20:00~23:00)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">23:00 화면 무조건 종료 $\rightarrow$ 이완 후 1시 이전 취침</div>
-            </details>
-          </td>
-        </tr>
-        <tr class="row-white">
-          <td class="day-col">화</td>
-          <td>
-            메일 확인 (30m) + <b>광고툰 기획 (1.5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">광고 아이디어 및 스크립트 작성 $\rightarrow$ 광고주 1차 전달</div>
-            </details>
-          </td>
-          <td>
-            <b>[꿀차툰] 일상툰 콘티 & 선화 (5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">오전에 덜 끝난 광고 보충(30m) 후 일상툰 펜터치 몰입 (서울 외출 시 17:00 마감)</div>
-            </details>
-          </td>
-          <td>
-            <b>[후보 1] 평일 서울 외출 (17시~)</b> OR <b>유튜브 편집</b>
-          </td>
-        </tr>
-        <tr class="row-light">
-          <td class="day-col">수</td>
-          <td>
-            메일 확인 (30m) + <b>신규캐시 기획 (1.5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">REBT/걱정안냥 워크북 기반 4~6인 심리 파일럿 커리큘럼 작성</div>
-            </details>
-          </td>
-          <td>
-            <b>[한해지도] 지도 채색 & 스티커/봉투 규격 (5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">부자재 규격 확정 및 디테일 채색 / 18:45 미완성 트리거 저장 후 19시 칼퇴</div>
-            </details>
-          </td>
-          <td>
-            <b>[격주] 농구학원 (21:00~24:00) 🏀</b> OR <b>유튜브 편집</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">농구 날은 19:00 식사 후 21:00까지 누워서 뇌 완전 휴식</div>
-            </details>
-          </td>
-        </tr>
-        <tr class="row-white">
-          <td class="day-col">목</td>
-          <td>
-            메일 확인 (30m) + <b>광고툰 그림콘티 (1.5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">피드백 반영 4~8컷 그림콘티 러프 완성 $\rightarrow$ 광고주 2차 송부</div>
-            </details>
-          </td>
-          <td>
-            <b>[꿀차툰] 일상툰 채색/대사 마감 & 업로드 (4h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">18:00 정시 마감 $\rightarrow$ 18:00 깨굴 미팅 합류</div>
-            </details>
-          </td>
-          <td>
-            <b>깨굴 유튜브 회의 & 촬영 (18:00~21:00) 🎬</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">저녁 식사 + 숏폼/일상 기획 회의 + 영상 촬영 $\rightarrow$ 21:00 종료 후 개인 휴식</div>
-            </details>
-          </td>
-        </tr>
-        <tr class="row-light">
-          <td class="day-col">금</td>
-          <td>
-            메일 확인 (30m) + <b>신규/주간 마감 (1.5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">신청폼 점검, 주간 세금/정산 완료, 다음 주 우선순위 Top 2 세팅</div>
-            </details>
-          </td>
-          <td>
-            <b>[한해지도] 최종 발주 패키징 & 잔여 작업 (5h)</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">10월 2일 발주 대비 파일 검수 및 이번 주 미진했던 작업 마감 / 18:45 저장</div>
-            </details>
-          </td>
-          <td>
-            <b>농구학원 (21:00~24:00) 🏀</b>
-            <details>
-              <summary>세부 내용</summary>
-              <div class="toggle-content">주간 업무 완결 후 심야 운동 $\rightarrow$ 주말 완전 휴식 모드 전환</div>
-            </details>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- 매일 공통 루틴 바 -->
+    <div class="common-routine-card">
+      <div class="common-title">🌿 매일 공통 루틴</div>
+      <div style="font-size: 0.88em; line-height: 1.6;">
+        • <b>12:00 - 13:00</b> : 점심 식사 및 설거지 / 주방 정리<br>
+        • <b>13:00 - 14:00</b> : 택배 발송 ➔ 인스타 소통(20분 컷) ➔ 캔버스 세팅<br>
+        • <b>18:45 - 19:00</b> : 내일 첫 5분에 끝낼 미완성 트리거 남기고 퇴근
+      </div>
+    </div>
+
+    <!-- 10:00 - 12:00 오전 블록 -->
+    <div style="font-weight: 700; color: var(--primary); margin: 12px 0 6px 2px; font-size: 0.95em;">
+      📍 오전 블록 (10:00 - 12:00) : 메일(30m) + 기획
+    </div>
+    <div class="grid-2col">
+      <div class="grid-card">
+        <div class="grid-card-title">월요일</div>
+        <div style="font-size:0.85em; font-weight:600;">[고정] 친구 주간회의</div>
+        <div style="font-size:0.75em; color:#666;">주간 R&R / 지표 점검</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">화요일</div>
+        <div style="font-size:0.85em; font-weight:600;">광고툰 기획 (1.5h)</div>
+        <div style="font-size:0.75em; color:#666;">아이디어 스크립트</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">수요일</div>
+        <div style="font-size:0.85em; font-weight:600;">심리모임 기획 (1.5h)</div>
+        <div style="font-size:0.75em; color:#666;">워크북 커리큘럼 뼈대</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">목요일</div>
+        <div style="font-size:0.85em; font-weight:600;">광고 콘티 (1.5h)</div>
+        <div style="font-size:0.75em; color:#666;">피드백 반영 4~8컷</div>
+      </div>
+      <div class="grid-card" style="grid-column: span 2;">
+        <div class="grid-card-title">금요일</div>
+        <div style="font-size:0.85em; font-weight:600;">신청폼 세팅 & 주간 행정/정산 마감 (1.5h)</div>
+      </div>
+    </div>
+
+    <!-- 14:00 - 19:00 오후 딥워크 블록 -->
+    <div style="font-weight: 700; color: var(--primary); margin: 16px 0 6px 2px; font-size: 0.95em;">
+      🔥 오후 딥워크 (14:00 - 19:00) : 단일 작업 몰입
+    </div>
+    <div class="grid-2col">
+      <div class="grid-card">
+        <div class="grid-card-title">월 (지도 5h)</div>
+        <div style="font-size:0.85em; font-weight:600;">한해지도 일러스트</div>
+        <div style="font-size:0.75em; color:#666;">메인 지도 집중 드로잉</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">화 (툰 5h)</div>
+        <div style="font-size:0.85em; font-weight:600;">꿀차툰 선화/콘티</div>
+        <div style="font-size:0.75em; color:#E07A5F;">*외출 시 17:00 마감</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">수 (지도 5h)</div>
+        <div style="font-size:0.85em; font-weight:600;">한해지도 채색</div>
+        <div style="font-size:0.75em; color:#666;">봉투/스티커 규격</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">목 (툰 4h)</div>
+        <div style="font-size:0.85em; font-weight:600;">꿀차툰 마감/업로드</div>
+        <div style="font-size:0.75em; color:#E07A5F;">*18:00 깨굴 미팅</div>
+      </div>
+      <div class="grid-card" style="grid-column: span 2;">
+        <div class="grid-card-title">금 (지도/마감 5h)</div>
+        <div style="font-size:0.85em; font-weight:600;">한해지도 최종 패키징 검수 & 주간 잔여 작업 마감</div>
+      </div>
+    </div>
+
+    <!-- 20:00 이후 야간 블록 -->
+    <div style="font-weight: 700; color: var(--primary); margin: 16px 0 6px 2px; font-size: 0.95em;">
+      🌙 저녁 & 야간 일정
+    </div>
+    <div class="grid-2col">
+      <div class="grid-card">
+        <div class="grid-card-title">월요일</div>
+        <div style="font-size:0.85em; font-weight:600;">유튜브 편집</div>
+        <div style="font-size:0.75em; color:#E07A5F;">(20~23시 셧다운)</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">화요일</div>
+        <div style="font-size:0.85em; font-weight:600;">서울 미팅</div>
+        <div style="font-size:0.75em; color:#666;">OR 유튜브 편집</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">수요일</div>
+        <div style="font-size:0.85em; font-weight:600;">농구학원 🏀</div>
+        <div style="font-size:0.75em; color:#666;">(격주) OR 편집</div>
+      </div>
+      <div class="grid-card">
+        <div class="grid-card-title">목요일</div>
+        <div style="font-size:0.85em; font-weight:600;">깨굴 회의 🎬</div>
+        <div style="font-size:0.75em; color:#666;">(18:00~21:00)</div>
+      </div>
+      <div class="grid-card" style="grid-column: span 2;">
+        <div class="grid-card-title">금요일</div>
+        <div style="font-size:0.85em; font-weight:600;">농구학원 🏀 (21:00 ~ 24:00) ➔ 주말 휴식</div>
+      </div>
+    </div>
+
   </div>
 
 </div>
+
+<script>
+  function switchView(viewId) {
+    // 섹션 전환
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+
+    // 탭 버튼 활성화 스타일 전환
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    if (viewId === 'view-daily') {
+      buttons[0].classList.add('active');
+    } else {
+      buttons[1].classList.add('active');
+    }
+  }
+</script>
 
 </body>
 </html>
