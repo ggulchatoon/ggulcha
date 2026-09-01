@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>우주의 피자버거 캘린더 🍔🍕</title>
+  
+  <!-- Google Fonts: Fredoka (Retro Diner Pop) & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================
+       1. 1960s American Retro Diner Design System
+       ========================================================== */
+    :root {
+      --diner-ketchup: #e11d48;
+      --diner-ketchup-dark: #9f1239;
+      --diner-ketchup-light: #fecdd3;
+      --diner-mustard: #f59e0b;
+      --diner-mustard-dark: #b45309;
+      --diner-mustard-light: #fef3c7;
+      --diner-cream: #fffdf7;
+      --diner-cream-dark: #fbf5e5;
+      --diner-slate: #1f1b18;
+      --diner-charcoal: #2d2621;
+      --diner-border: #e6dfce;
+      --diner-relish: #16a34a;
+      --diner-shadow: 0 10px 25px -4px rgba(31, 27, 24, 0.12), 0 4px 6px -2px rgba(31, 27, 24, 0.05);
+      --diner-press-shadow: 0 3px 0 var(--diner-ketchup-dark);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #2b2520;
+      background-image: 
+        radial-gradient(circle at 50% 20%, #3d342d 0%, #201a16 100%);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--diner-slate);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Mobile Container Frame (Max 430px) */
+    .diner-app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: var(--diner-cream);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+      overflow-x: hidden;
+      padding-bottom: 90px; /* Space for bottom navigation */
+    }
+
+    /* Checkerboard Retro Strip */
+    .checkerboard-strip {
+      height: 10px;
+      width: 100%;
+      background-color: var(--diner-slate);
+      background-image: 
+        linear-gradient(45deg, var(--diner-cream) 25%, transparent 25%), 
+        linear-gradient(-45deg, var(--diner-cream) 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, var(--diner-cream) 75%), 
+        linear-gradient(-45deg, transparent 75%, var(--diner-cream) 75%);
+      background-size: 14px 14px;
+      background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+    }
+
+    /* Retro Diner Header */
+    .diner-header {
+      background: var(--diner-ketchup);
+      background-image: linear-gradient(180deg, #f43f5e 0%, var(--diner-ketchup) 100%);
+      color: #ffffff;
+      padding: 18px 18px 16px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .diner-badge {
+      background: var(--diner-mustard);
+      color: var(--diner-slate);
+      font-family: 'Fredoka', cursive;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .diner-logo {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: 2px 2px 0px var(--diner-ketchup-dark), 0 0 12px rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .diner-subtitle {
+      font-size: 0.78rem;
+      color: #ffe4e6;
+      font-weight: 500;
+      margin-top: 2px;
+      letter-spacing: 0.2px;
+    }
+
+    /* Monthly Matchup Scoreboard */
+    .scoreboard-card {
+      margin: 16px 16px 12px;
+      background: #ffffff;
+      border: 2px solid var(--diner-slate);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: 4px 4px 0px var(--diner-slate);
+      position: relative;
+    }
+
+    .month-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .month-nav-btn {
+      background: var(--diner-cream);
+      border: 1.5px solid var(--diner-slate);
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.1s;
+    }
+
+    .month-nav-btn:active {
+      transform: translateY(1px);
+    }
+
+    .current-month-label {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--diner-slate);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .today-jump-btn {
+      font-size: 0.72rem;
+      background: var(--diner-mustard-light);
+      color: var(--diner-mustard-dark);
+      border: 1px solid var(--diner-mustard);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .score-battle-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .score-side {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .score-side.right {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+
+    .score-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .score-info .score-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .score-info .score-num {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.45rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .burger-text { color: var(--diner-ketchup); }
+    .pizza-text { color: var(--diner-mustard-dark); }
+
+    .vs-emblem {
+      font-family: 'Fredoka', cursive;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: #f1f5f9;
+      padding: 3px 6px;
+      border-radius: 8px;
+    }
+
+    /* Battle Ratio Progress Bar */
+    .battle-bar-track {
+      height: 14px;
+      background: var(--diner-mustard);
+      border-radius: 10px;
+      border: 1.5px solid var(--diner-slate);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+    }
+
+    .battle-bar-burger {
+      height: 100%;
+      background: var(--diner-ketchup);
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-right: 1.5px solid var(--diner-slate);
+    }
+
+    .leader-announcement {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--diner-charcoal);
+    }
+
+    /* Dual Tab Navigation Switcher */
+    .tab-switcher {
+      display: flex;
+      margin: 0 16px 12px;
+      background: #e2dcd0;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1.5px solid var(--diner-slate);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #645a50;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: var(--diner-slate);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* Tab Content Areas */
+    .tab-view {
+      display: none;
+      padding: 0 16px;
+    }
+
+    .tab-view.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================
+       2. Calendar View Styling
+       ========================================================== */
+    .calendar-container {
+      background: #ffffff;
+      border: 2px solid var(--diner-slate);
+      border-radius: 20px;
+      padding: 14px 10px 16px;
+      box-shadow: 4px 4px 0px var(--diner-slate);
+      margin-bottom: 20px;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-family: 'Fredoka', cursive;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      padding-bottom: 8px;
+      border-bottom: 1.5px dashed var(--diner-border);
+      margin-bottom: 8px;
+    }
+
+    .calendar-weekdays .sun { color: var(--diner-ketchup); }
+    .calendar-weekdays .sat { color: #3b82f6; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .calendar-cell {
+      min-height: 52px;
+      background: var(--diner-cream);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .calendar-cell:active {
+      transform: scale(0.94);
+    }
+
+    .calendar-cell.other-month {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .calendar-cell.today {
+      border-color: var(--diner-ketchup);
+      background: #fff5f5;
+    }
+
+    .calendar-cell.today .day-number {
+      background: var(--diner-ketchup);
+      color: #ffffff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--diner-slate);
+      margin-bottom: 2px;
+    }
+
+    .calendar-cell.sun .day-number { color: var(--diner-ketchup); }
+    .calendar-cell.sat .day-number { color: #3b82f6; }
+
+    /* Stamp Stickers on Calendar */
+    .stamp-badge-cluster {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      margin-top: 2px;
+    }
+
+    .stamp-sticker {
+      font-size: 1.15rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+      animation: popStamp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popStamp {
+      0% { transform: scale(0.3); opacity: 0; }
+      70% { transform: scale(1.25); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .stamp-count-pill {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: var(--diner-slate);
+      color: #ffffff;
+      font-size: 0.58rem;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 6px;
+    }
+
+    /* Quick Guide Box */
+    .diner-hint-box {
+      background: #fdfaf0;
+      border: 1px dashed var(--diner-mustard-dark);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: #645a50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    /* ==========================================================
+       3. Food Diary Feed Styling
+       ========================================================== */
+    .diary-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .diary-filter-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .filter-chip {
+      background: #ffffff;
+      border: 1.5px solid var(--diner-slate);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #64748b;
+      transition: all 0.15s;
+    }
+
+    .filter-chip.active {
+      background: var(--diner-slate);
+      color: #ffffff;
+    }
+
+    .diary-count-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #78716c;
+    }
+
+    .diary-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .diary-empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      background: #ffffff;
+      border: 2px dashed var(--diner-border);
+      border-radius: 20px;
+      color: #94a3b8;
+    }
+
+    .diary-empty-icon {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+
+    /* Food Diary Card */
+    .diary-card {
+      background: #ffffff;
+      border: 2px solid var(--diner-slate);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 3px 3px 0px var(--diner-slate);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .card-type-badge.burger { background: var(--diner-ketchup); }
+    .card-type-badge.pizza { background: var(--diner-mustard); color: var(--diner-slate); }
+    .card-type-badge.both { background: #8b5cf6; }
+
+    .card-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .card-photo-box {
+      width: 100%;
+      height: 180px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid var(--diner-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card-photo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-photo-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #94a3b8;
+      font-size: 2.5rem;
+    }
+
+    .card-content h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--diner-slate);
+      margin-bottom: 4px;
+    }
+
+    .card-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .store-tag {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--diner-mustard-dark);
+      background: var(--diner-mustard-light);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .rating-stars {
+      color: #f59e0b;
+      font-size: 0.95rem;
+      letter-spacing: -1px;
+    }
+
+    .card-review {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.45;
+      background: #fdfaf2;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border-left: 3px solid var(--diner-ketchup);
+      font-style: italic;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn-card-action {
+      background: transparent;
+      border: 1px solid var(--diner-border);
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-card-action:hover {
+      color: var(--diner-ketchup);
+      border-color: var(--diner-ketchup);
+    }
+
+    /* Floating Action Button (도장 쾅! 찍기) */
+    .fab-stamp-btn {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      background: var(--diner-ketchup);
+      background-image: linear-gradient(135deg, #f43f5e 0%, var(--diner-ketchup) 100%);
+      color: #ffffff;
+      border: 2.5px solid var(--diner-slate);
+      border-radius: 30px;
+      padding: 12px 24px;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(225, 29, 72, 0.4), 3px 3px 0 var(--diner-slate);
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .fab-stamp-btn:active {
+      transform: translateX(-50%) scale(0.95) translateY(2px);
+      box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3), 1px 1px 0 var(--diner-slate);
+    }
+
+    /* ==========================================================
+       4. Stamp & Review Modal
+       ========================================================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(31, 27, 24, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .stamp-window {
+      background: var(--diner-cream);
+      border: 3px solid var(--diner-slate);
+      border-radius: 26px;
+      width: 100%;
+      max-width: 390px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px 18px 20px;
+      box-shadow: 6px 6px 0px var(--diner-slate);
+      transform: translateY(20px) scale(0.96);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .modal-backdrop.open .stamp-window {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--diner-ketchup);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-close-btn {
+      background: #f1f5f9;
+      border: 1.5px solid var(--diner-slate);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Food Type Selector Pills */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--diner-slate);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .type-selector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .type-radio-btn {
+      background: #ffffff;
+      border: 2px solid var(--diner-border);
+      border-radius: 14px;
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .type-radio-btn .icon { font-size: 1.6rem; }
+    .type-radio-btn .txt { font-size: 0.78rem; font-weight: 700; color: #64748b; }
+
+    .type-radio-btn.selected {
+      border-color: var(--diner-ketchup);
+      background: #fff1f2;
+      box-shadow: 0 4px 10px rgba(225, 29, 72, 0.15);
+    }
+    .type-radio-btn.selected .txt { color: var(--diner-ketchup); }
+
+    .input-text {
+      width: 100%;
+      padding: 10px 12px;
+      background: #ffffff;
+      border: 1.5px solid var(--diner-border);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      color: var(--diner-slate);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .input-text:focus {
+      border-color: var(--diner-ketchup);
+    }
+
+    .star-rating-selector {
+      display: flex;
+      gap: 8px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .star-item {
+      color: #cbd5e1;
+      transition: transform 0.1s, color 0.1s;
+    }
+
+    .star-item.active {
+      color: #f59e0b;
+      transform: scale(1.08);
+    }
+
+    /* Photo Upload Box */
+    .photo-upload-area {
+      border: 2px dashed var(--diner-border);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      background: #ffffff;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .photo-preview-img {
+      width: 100%;
+      max-height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .photo-upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #94a3b8;
+      font-size: 0.78rem;
+    }
+
+    /* Big Submit Stamp Button */
+    .btn-submit-stamp {
+      width: 100%;
+      background: var(--diner-ketchup);
+      color: #ffffff;
+      border: 2.5px solid var(--diner-slate);
+      border-radius: 16px;
+      padding: 14px;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--diner-slate);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      transition: all 0.1s;
+    }
+
+    .btn-submit-stamp:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--diner-slate);
+    }
+
+    /* Stamp Slap Animation Overlay */
+    .stamp-impact-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0) rotate(-15deg);
+      z-index: 300;
+      pointer-events: none;
+      font-family: 'Fredoka', cursive;
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--diner-ketchup);
+      border: 6px solid var(--diner-ketchup);
+      padding: 10px 24px;
+      border-radius: 24px;
+      background: rgba(255, 253, 245, 0.95);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .stamp-impact-overlay.slammed {
+      transform: translate(-50%, -50%) scale(1) rotate(-8deg);
+      opacity: 1;
+    }
+
+    /* Toast Notification */
+    .toast-pill {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: var(--diner-slate);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+
+    .toast-pill.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="diner-app">
+    <!-- Top Checkerboard Border -->
+    <div class="checkerboard-strip"></div>
+
+    <!-- Retro Diner Header -->
+    <header class="diner-header">
+      <div class="header-top-row">
+        <span class="diner-badge">WOOJU'S SPECIAL</span>
+        <div class="header-actions">
+          <button class="icon-btn" id="soundToggleBtn" title="효과음 켜기/끄기" aria-label="사운드">
+            <span id="soundIcon">🔊</span>
+          </button>
+        </div>
+      </div>
+      <h1 class="diner-logo">
+        <span>🍔</span>
+        <span>PIZZA & BURGER</span>
+        <span>🍕</span>
+      </h1>
+      <p class="diner-subtitle">남편 우주의 맛있는 버거 & 피자 도장 캘린더</p>
+    </header>
+
+    <!-- Monthly Matchup Scoreboard -->
+    <section class="scoreboard-card">
+      <div class="month-nav-row">
+        <button class="month-nav-btn" id="prevMonthBtn" aria-label="이전 달">◀</button>
+        <div class="current-month-label">
+          <span id="currentYearMonth">2026년 9월</span>
+          <button class="today-jump-btn" id="todayJumpBtn">오늘</button>
+        </div>
+        <button class="month-nav-btn" id="nextMonthBtn" aria-label="다음 달">▶</button>
+      </div>
+
+      <div class="score-battle-grid">
+        <!-- Burger Side -->
+        <div class="score-side left">
+          <div class="score-emoji">🍔</div>
+          <div class="score-info">
+            <div class="score-label">버거 먹은 날</div>
+            <div class="score-num burger-text" id="monthBurgerCount">0회</div>
+          </div>
+        </div>
+
+        <div class="vs-emblem">VS</div>
+
+        <!-- Pizza Side -->
+        <div class="score-side right">
+          <div class="score-emoji">🍕</div>
+          <div class="score-info">
+            <div class="score-label">피자 먹은 날</div>
+            <div class="score-num pizza-text" id="monthPizzaCount">0회</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ratio Bar -->
+      <div class="battle-bar-track">
+        <div class="battle-bar-burger" id="battleBarBurger" style="width: 50%;"></div>
+      </div>
+      <div class="leader-announcement" id="leaderAnnouncement">
+        🔥 이번 달 우주의 첫 피자/버거를 개시해보세요!
+      </div>
+    </section>
+
+    <!-- Tab Navigation Switcher -->
+    <nav class="tab-switcher">
+      <button class="tab-btn active" id="tabCalendarBtn">
+        <span>📅</span>
+        <span>스탬프 달력</span>
+      </button>
+      <button class="tab-btn" id="tabDiaryBtn">
+        <span>📸</span>
+        <span>미식 일기장</span>
+      </button>
+    </nav>
+
+    <!-- ==================== TAB 1: 캘린더 ==================== -->
+    <main class="tab-view active" id="viewCalendar">
+      <div class="calendar-container">
+        <div class="calendar-weekdays">
+          <span class="sun">일</span>
+          <span>월</span>
+          <span>화</span>
+          <span>수</span>
+          <span>목</span>
+          <span>금</span>
+          <span class="sat">토</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="diner-hint-box">
+        <span style="font-size:1.1rem;">💡</span>
+        <span>달력의 날짜를 누르거나, 아래 <b>'도장 쾅!'</b> 버튼을 누르면 우주의 버거/피자 기록을 남길 수 있어요!</span>
+      </div>
+    </main>
+
+    <!-- ==================== TAB 2: 미식 일기장 ==================== -->
+    <main class="tab-view" id="viewDiary">
+      <div class="diary-controls-bar">
+        <div class="diary-filter-chips">
+          <button class="filter-chip active" data-filter="all">전체보기</button>
+          <button class="filter-chip" data-filter="burger">🍔 버거</button>
+          <button class="filter-chip" data-filter="pizza">🍕 피자</button>
+        </div>
+        <span class="diary-count-label" id="diaryTotalCount">총 0개</span>
+      </div>
+
+      <div class="diary-feed" id="diaryFeed">
+        <!-- Dynamically populated -->
+      </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab-stamp-btn" id="openStampModalBtn">
+      <span>🛎️</span>
+      <span>스탬프 쾅! 찍기</span>
+    </button>
+
+    <!-- Bottom Checkerboard Border -->
+    <div class="checkerboard-strip" style="position: absolute; bottom: 0; left: 0;"></div>
+  </div>
+
+  <!-- ==================== STAMP MODAL ==================== -->
+  <div class="modal-backdrop" id="stampModal">
+    <div class="stamp-window">
+      <div class="modal-header-row">
+        <h2 class="modal-title" id="modalTitle">
+          <span>🛎️</span>
+          <span>우주의 피자버거 도장</span>
+        </h2>
+        <button class="modal-close-btn" id="closeModalBtn">✕</button>
+      </div>
+
+      <form id="stampForm">
+        <input type="hidden" id="entryId" value="" />
+
+        <!-- 1. Food Type Selection -->
+        <div class="form-group">
+          <label class="form-label">오늘 우주가 먹은 메뉴는?</label>
+          <div class="type-selector-grid">
+            <div class="type-radio-btn selected" data-type="burger">
+              <span class="icon">🍔</span>
+              <span class="txt">햄버거</span>
+            </div>
+            <div class="type-radio-btn" data-type="pizza">
+              <span class="icon">🍕</span>
+              <span class="txt">피자</span>
+            </div>
+            <div class="type-radio-btn" data-type="both">
+              <span class="icon">🍔🍕</span>
+              <span class="txt">둘 다 먹음!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Date Selection -->
+        <div class="form-group">
+          <label class="form-label" for="stampDate">먹은 날짜</label>
+          <input type="date" id="stampDate" class="input-text" required />
+        </div>
+
+        <!-- 3. Menu Name -->
+        <div class="form-group">
+          <label class="form-label" for="stampMenu">메뉴 이름</label>
+          <input type="text" id="stampMenu" class="input-text" placeholder="예: 더블 쿼터파운더 치즈버거 세트" required />
+        </div>
+
+        <!-- 4. Store / Brand -->
+        <div class="form-group">
+          <label class="form-label" for="stampStore">가게 / 브랜드 (선택)</label>
+          <input type="text" id="stampStore" class="input-text" placeholder="예: 맥도날드, 도미노피자, 쉑쉑" />
+        </div>
+
+        <!-- 5. Star Rating -->
+        <div class="form-group">
+          <label class="form-label">우주의 맛 평가 (별점)</label>
+          <div class="star-rating-selector" id="starRatingSelector">
+            <span class="star-item active" data-rating="1">★</span>
+            <span class="star-item active" data-rating="2">★</span>
+            <span class="star-item active" data-rating="3">★</span>
+            <span class="star-item active" data-rating="4">★</span>
+            <span class="star-item active" data-rating="5">★</span>
+          </div>
+        </div>
+
+        <!-- 6. Review / Comment -->
+        <div class="form-group">
+          <label class="form-label" for="stampReview">한줄 감상평</label>
+          <textarea id="stampReview" class="input-text" rows="2" placeholder="예: 육즙 가득하고 패티가 최고였음!"></textarea>
+        </div>
+
+        <!-- 7. Photo Upload -->
+        <div class="form-group">
+          <label class="form-label">음식 사진 (선택)</label>
+          <div class="photo-upload-area" id="photoUploadArea">
+            <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+            <img id="photoPreview" class="photo-preview-img" alt="사진 미리보기" />
+            <div class="photo-upload-placeholder" id="photoPlaceholder">
+              <span style="font-size:1.8rem;">📸</span>
+              <span>터치하여 버거/피자 사진 첨부</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit-stamp" id="btnSubmitStamp">
+          <span>💥</span>
+          <span>달력에 도장 쾅! 찍기</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Stamp Slap Animation Visual Overlay -->
+  <div class="stamp-impact-overlay" id="stampSlapEffect">
+    STAMPED! 🍔
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-pill" id="toastMsg">알림 메시지</div>
+
+  <!-- ==========================================================
+       JAVASCRIPT APPLICATION LOGIC
+       ========================================================== */ -->
+  <script>
+    /* ==========================================================
+       1. App State & Local Storage Management
+       ========================================================== */
+    const STORAGE_KEY = 'wooju_pizzaburger_records_v1';
+    const SOUND_KEY = 'wooju_pizzaburger_sound_v1';
+
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth(); // 0-indexed (0 = Jan, 8 = Sep)
+    let selectedType = 'burger';
+    let currentRating = 5;
+    let uploadedPhotoBase64 = '';
+    let soundEnabled = true;
+    let activeFilter = 'all';
+
+    // Sample initial data for Wooju if totally empty
+    const INITIAL_SAMPLE_DATA = [
+      {
+        id: 'sample-1',
+        date: formatDateStr(new Date()),
+        type: 'burger',
+        menu: '스모크쉑 더블 버거',
+        store: '쉑쉑버거',
+        rating: 5,
+        review: '패티 불향이 제대로 배어있고 베이컨이 바삭해서 천상의 맛!',
+        photo: '',
+        createdAt: Date.now() - 3600000
+      }
+    ];
+
+    function getStoredRecords() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_SAMPLE_DATA));
+          return INITIAL_SAMPLE_DATA;
+        }
+        return JSON.parse(raw) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveRecords(records) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function formatDateStr(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    /* ==========================================================
+       2. Web Audio Sound Engine (Stamp Thump & Bell Chimes)
+       ========================================================== */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playStampSound() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        // 1. Deep Sub Thump (Rubber stamp hitting wooden desk)
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(38, now + 0.14);
+
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+
+        // 2. Retro Service Bell Ding! (Cash register bell)
+        setTimeout(() => {
+          if (!soundEnabled || !ctx) return;
+          const t = ctx.currentTime;
+          const bell = ctx.createOscillator();
+          const bellGain = ctx.createGain();
+          bell.type = 'triangle';
+          bell.frequency.setValueAtTime(1760, t); // A6 bright bell
+          bellGain.gain.setValueAtTime(0.12, t);
+          bellGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+
+          bell.connect(bellGain);
+          bellGain.connect(ctx.destination);
+          bell.start(t);
+          bell.stop(t + 0.65);
+        }, 80);
+      } catch (e) {}
+    }
+
+    function playStarSound(starIndex) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const scale = [523.25, 587.33, 659.25, 783.99, 880.00]; // C5, D5, E5, G5, A5
+        const freq = scale[Math.min(scale.length - 1, Math.max(0, starIndex - 1))];
+        const now = ctx.currentTime;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.2);
+      } catch (e) {}
+    }
+
+    function playClickSound() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.03, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      } catch (e) {}
+    }
+
+    /* ==========================================================
+       3. DOM Elements
+       ========================================================== */
+    const currentYearMonth = document.getElementById('currentYearMonth');
+    const prevMonthBtn = document.getElementById('prevMonthBtn');
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+    const todayJumpBtn = document.getElementById('todayJumpBtn');
+    const monthBurgerCount = document.getElementById('monthBurgerCount');
+    const monthPizzaCount = document.getElementById('monthPizzaCount');
+    const battleBarBurger = document.getElementById('battleBarBurger');
+    const leaderAnnouncement = document.getElementById('leaderAnnouncement');
+    
+    const tabCalendarBtn = document.getElementById('tabCalendarBtn');
+    const tabDiaryBtn = document.getElementById('tabDiaryBtn');
+    const viewCalendar = document.getElementById('viewCalendar');
+    const viewDiary = document.getElementById('viewDiary');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const diaryFeed = document.getElementById('diaryFeed');
+    const diaryTotalCount = document.getElementById('diaryTotalCount');
+    const filterChips = document.querySelectorAll('.filter-chip');
+
+    const openStampModalBtn = document.getElementById('openStampModalBtn');
+    const stampModal = document.getElementById('stampModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const stampForm = document.getElementById('stampForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const entryIdInput = document.getElementById('entryId');
+    const stampDateInput = document.getElementById('stampDate');
+    const stampMenuInput = document.getElementById('stampMenu');
+    const stampStoreInput = document.getElementById('stampStore');
+    const stampReviewInput = document.getElementById('stampReview');
+    const typeButtons = document.querySelectorAll('.type-radio-btn');
+    const starItems = document.querySelectorAll('.star-item');
+    const photoUploadArea = document.getElementById('photoUploadArea');
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoPlaceholder = document.getElementById('photoPlaceholder');
+    const stampSlapEffect = document.getElementById('stampSlapEffect');
+    const toastMsg = document.getElementById('toastMsg');
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const soundIcon = document.getElementById('soundIcon');
+
+    /* ==========================================================
+       4. Render Scoreboard & Calendar View
+       ========================================================== */
+    function renderScoreboard() {
+      const records = getStoredRecords();
+      currentYearMonth.textContent = `${currentYear}년 ${currentMonth + 1}월`;
+
+      // Filter records for current displayed month
+      const currentMonthPrefix = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+      let burgerCount = 0;
+      let pizzaCount = 0;
+
+      records.forEach(r => {
+        if (r.date.startsWith(currentMonthPrefix)) {
+          if (r.type === 'burger') burgerCount++;
+          else if (r.type === 'pizza') pizzaCount++;
+          else if (r.type === 'both') {
+            burgerCount++;
+            pizzaCount++;
+          }
+        }
+      });
+
+      monthBurgerCount.textContent = `${burgerCount}회`;
+      monthPizzaCount.textContent = `${pizzaCount}회`;
+
+      // Ratio Bar & Announcement
+      const total = burgerCount + pizzaCount;
+      let burgerPercent = 50;
+      if (total > 0) {
+        burgerPercent = Math.round((burgerCount / total) * 100);
+      }
+      battleBarBurger.style.width = `${burgerPercent}%`;
+
+      if (total === 0) {
+        leaderAnnouncement.innerHTML = `🔥 이번 달 우주의 첫 피자/버거를 개시해보세요!`;
+      } else if (burgerCount > pizzaCount) {
+        const diff = burgerCount - pizzaCount;
+        leaderAnnouncement.innerHTML = `👑 버거가 <b>${diff}개</b> 앞서는 중! 우주는 버거파? 🍔`;
+      } else if (pizzaCount > burgerCount) {
+        const diff = pizzaCount - burgerCount;
+        leaderAnnouncement.innerHTML = `👑 피자가 <b>${diff}개</b> 앞서는 중! 우주는 피자파? 🍕`;
+      } else {
+        leaderAnnouncement.innerHTML = `🔥 <b>${burgerCount} : ${pizzaCount}</b> 팽팽한 황금 밸런스 유지 중!`;
+      }
+    }
+
+    function renderCalendar() {
+      calendarGrid.innerHTML = '';
+      const records = getStoredRecords();
+
+      // First day of month & total days
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay(); // 0 = Sun
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+
+      const todayStr = formatDateStr(new Date());
+
+      // Pre-aggregate records by date: { '2026-09-02': [entry1, entry2] }
+      const recordMap = {};
+      records.forEach(r => {
+        if (!recordMap[r.date]) recordMap[r.date] = [];
+        recordMap[r.date].push(r);
+      });
+
+      // Previous month trailing days
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell other-month';
+        cell.innerHTML = `<span class="day-number">${prevMonthDays - i}</span>`;
+        calendarGrid.appendChild(cell);
+      }
+
+      // Current month days
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayOfWeek = (firstDay + day - 1) % 7;
+
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell';
+        if (dayOfWeek === 0) cell.classList.add('sun');
+        if (dayOfWeek === 6) cell.classList.add('sat');
+        if (dateStr === todayStr) cell.classList.add('today');
+
+        let cellContent = `<span class="day-number">${day}</span>`;
+
+        // Check if there are food records on this day
+        const dayRecords = recordMap[dateStr] || [];
+        if (dayRecords.length > 0) {
+          let hasBurger = false;
+          let hasPizza = false;
+          dayRecords.forEach(r => {
+            if (r.type === 'burger') hasBurger = true;
+            if (r.type === 'pizza') hasPizza = true;
+            if (r.type === 'both') { hasBurger = true; hasPizza = true; }
+          });
+
+          cellContent += `<div class="stamp-badge-cluster">`;
+          if (hasBurger && hasPizza) {
+            cellContent += `<span class="stamp-sticker">🍔🍕</span>`;
+          } else if (hasBurger) {
+            cellContent += `<span class="stamp-sticker">🍔</span>`;
+          } else if (hasPizza) {
+            cellContent += `<span class="stamp-sticker">🍕</span>`;
+          }
+          cellContent += `</div>`;
+
+          if (dayRecords.length > 1) {
+            cellContent += `<span class="stamp-count-pill">${dayRecords.length}</span>`;
+          }
+        }
+
+        cell.innerHTML = cellContent;
+
+        // Click cell interaction
+        cell.addEventListener('click', () => {
+          playClickSound();
+          if (dayRecords.length > 0) {
+            // Open Diary view filtered to this date, or open edit modal
+            openModalWithDate(dateStr, dayRecords[0]);
+          } else {
+            openModalWithDate(dateStr);
+          }
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+
+      // Next month leading days to complete grid
+      const totalRendered = firstDay + daysInMonth;
+      const remaining = (7 - (totalRendered % 7)) % 7;
+      for (let i = 1; i <= remaining; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell other-month';
+        cell.innerHTML = `<span class="day-number">${i}</span>`;
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    /* ==========================================================
+       5. Render Food Diary Feed View
+       ========================================================== */
+    function renderDiaryFeed() {
+      diaryFeed.innerHTML = '';
+      const records = getStoredRecords();
+
+      // Filter records
+      let filtered = [...records];
+      if (activeFilter === 'burger') {
+        filtered = filtered.filter(r => r.type === 'burger' || r.type === 'both');
+      } else if (activeFilter === 'pizza') {
+        filtered = filtered.filter(r => r.type === 'pizza' || r.type === 'both');
+      }
+
+      // Sort by date descending
+      filtered.sort((a, b) => new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+      diaryTotalCount.textContent = `총 ${filtered.length}개`;
+
+      if (filtered.length === 0) {
+        diaryFeed.innerHTML = `
+          <div class="diary-empty-state">
+            <div class="diary-empty-icon">🍽️</div>
+            <p>아직 등록된 미식 일기가 없습니다.</p>
+            <p style="font-size:0.75rem; margin-top:4px;">우주가 버거나 피자를 먹었을 때 도장을 쾅 찍어주세요!</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(entry => {
+        const card = document.createElement('article');
+        card.className = 'diary-card';
+
+        // Badge type
+        let badgeLabel = '🍔 햄버거';
+        let badgeClass = 'burger';
+        if (entry.type === 'pizza') {
+          badgeLabel = '🍕 피자';
+          badgeClass = 'pizza';
+        } else if (entry.type === 'both') {
+          badgeLabel = '🍔🍕 버거 & 피자';
+          badgeClass = 'both';
+        }
+
+        // Stars string
+        const stars = '★'.repeat(entry.rating) + '☆'.repeat(5 - entry.rating);
+
+        // Photo HTML
+        let photoHtml = '';
+        if (entry.photo) {
+          photoHtml = `
+            <div class="card-photo-box">
+              <img src="${entry.photo}" class="card-photo-img" alt="${entry.menu}" loading="lazy" />
+            </div>
+          `;
+        } else {
+          const fallbackEmoji = entry.type === 'pizza' ? '🍕' : (entry.type === 'both' ? '🍔🍕' : '🍔');
+          photoHtml = `
+            <div class="card-photo-box" style="background: ${entry.type === 'pizza' ? '#fef3c7' : '#fee2e2'};">
+              <div class="card-photo-fallback">
+                <span>${fallbackEmoji}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="card-top">
+            <span class="card-type-badge ${badgeClass}">${badgeLabel}</span>
+            <span class="card-date">${entry.date}</span>
+          </div>
+          ${photoHtml}
+          <div class="card-content">
+            <h3>${escapeHtml(entry.menu)}</h3>
+            <div class="card-meta-row">
+              ${entry.store ? `<span class="store-tag">📍 ${escapeHtml(entry.store)}</span>` : '<span></span>'}
+              <span class="rating-stars" title="${entry.rating}점">${stars}</span>
+            </div>
+            ${entry.review ? `<p class="card-review">"${escapeHtml(entry.review)}"</p>` : ''}
+          </div>
+          <div class="card-actions">
+            <button class="btn-card-action btn-edit-entry" data-id="${entry.id}">수정</button>
+            <button class="btn-card-action btn-del-entry" data-id="${entry.id}">삭제</button>
+          </div>
+        `;
+
+        // Edit & Delete event listeners
+        card.querySelector('.btn-edit-entry').addEventListener('click', () => {
+          playClickSound();
+          openModalWithDate(entry.date, entry);
+        });
+
+        card.querySelector('.btn-del-entry').addEventListener('click', () => {
+          if (confirm(`'${entry.menu}' 기록을 삭제하시겠습니까?`)) {
+            deleteRecord(entry.id);
+          }
+        });
+
+        diaryFeed.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function deleteRecord(id) {
+      let records = getStoredRecords();
+      records = records.filter(r => r.id !== id);
+      saveRecords(records);
+      renderScoreboard();
+      renderCalendar();
+      renderDiaryFeed();
+      showToast('기록이 삭제되었습니다.');
+    }
+
+    /* ==========================================================
+       6. Interactive Stamp Modal Logic
+       ========================================================== */
+    function openModalWithDate(dateStr, existingEntry = null) {
+      getAudioContext();
+      stampForm.reset();
+      uploadedPhotoBase64 = '';
+      photoPreview.src = '';
+      photoPreview.style.display = 'none';
+      photoPlaceholder.style.display = 'flex';
+
+      if (existingEntry) {
+        modalTitle.innerHTML = `<span>✏️</span> <span>기록 수정하기</span>`;
+        entryIdInput.value = existingEntry.id;
+        selectedType = existingEntry.type || 'burger';
+        stampDateInput.value = existingEntry.date;
+        stampMenuInput.value = existingEntry.menu || '';
+        stampStoreInput.value = existingEntry.store || '';
+        stampReviewInput.value = existingEntry.review || '';
+        setRating(existingEntry.rating || 5);
+        if (existingEntry.photo) {
+          uploadedPhotoBase64 = existingEntry.photo;
+          photoPreview.src = existingEntry.photo;
+          photoPreview.style.display = 'block';
+          photoPlaceholder.style.display = 'none';
+        }
+      } else {
+        modalTitle.innerHTML = `<span>🛎️</span> <span>우주의 피자버거 도장</span>`;
+        entryIdInput.value = '';
+        selectedType = 'burger';
+        stampDateInput.value = dateStr || formatDateStr(new Date());
+        setRating(5);
+      }
+
+      updateTypePills();
+      stampModal.classList.add('open');
+    }
+
+    function closeModal() {
+      stampModal.classList.remove('open');
+    }
+
+    function updateTypePills() {
+      typeButtons.forEach(btn => {
+        if (btn.dataset.type === selectedType) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+
+    typeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        playClickSound();
+        selectedType = btn.dataset.type;
+        updateTypePills();
+      });
+    });
+
+    function setRating(rating) {
+      currentRating = rating;
+      starItems.forEach(star => {
+        const starNum = parseInt(star.dataset.rating, 10);
+        if (starNum <= rating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+
+    starItems.forEach(star => {
+      star.addEventListener('click', () => {
+        const r = parseInt(star.dataset.rating, 10);
+        playStarSound(r);
+        setRating(r);
+      });
+    });
+
+    // Image Upload & Canvas Compression to Base64 (Max 480px width)
+    photoUploadArea.addEventListener('click', () => {
+      photoInput.click();
+    });
+
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          const maxDimension = 540;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxDimension) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            }
+          } else {
+            if (height > maxDimension) {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compress to JPEG 0.72 quality
+          uploadedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.72);
+          photoPreview.src = uploadedPhotoBase64;
+          photoPreview.style.display = 'block';
+          photoPlaceholder.style.display = 'none';
+          showToast('사진이 첨부되었습니다! 📸');
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Form Submit (Stamp Action)
+    stampForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      getAudioContext();
+
+      const menu = stampMenuInput.value.trim();
+      const date = stampDateInput.value;
+      const store = stampStoreInput.value.trim();
+      const review = stampReviewInput.value.trim();
+      const existingId = entryIdInput.value;
+
+      if (!menu) {
+        showToast('메뉴 이름을 입력해주세요!');
+        return;
+      }
+
+      let records = getStoredRecords();
+
+      if (existingId) {
+        // Edit existing
+        records = records.map(r => {
+          if (r.id === existingId) {
+            return {
+              ...r,
+              date,
+              type: selectedType,
+              menu,
+              store,
+              rating: currentRating,
+              review,
+              photo: uploadedPhotoBase64 || r.photo
+            };
+          }
+          return r;
+        });
+        showToast('기록이 수정되었습니다! ✨');
+      } else {
+        // New Stamp Entry!
+        const newEntry = {
+          id: 'entry-' + Date.now(),
+          date,
+          type: selectedType,
+          menu,
+          store,
+          rating: currentRating,
+          review,
+          photo: uploadedPhotoBase64,
+          createdAt: Date.now()
+        };
+        records.push(newEntry);
+
+        // Visual Stamp Slap & Audio effect!
+        triggerStampSlapAnimation(selectedType);
+      }
+
+      saveRecords(records);
+      closeModal();
+      renderScoreboard();
+      renderCalendar();
+      renderDiaryFeed();
+    });
+
+    function triggerStampSlapAnimation(type) {
+      playStampSound();
+      const emoji = type === 'pizza' ? 'PIZZA! 🍕' : (type === 'both' ? 'COMBO! 🍔🍕' : 'BURGER! 🍔');
+      stampSlapEffect.textContent = emoji;
+      stampSlapEffect.classList.add('slammed');
+
+      setTimeout(() => {
+        stampSlapEffect.classList.remove('slammed');
+      }, 750);
+    }
+
+    /* ==========================================================
+       7. General Interactions & Bootstrap
+       ========================================================== */
+    openStampModalBtn.addEventListener('click', () => {
+      openModalWithDate(formatDateStr(new Date()));
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+    stampModal.addEventListener('click', (e) => {
+      if (e.target === stampModal) closeModal();
+    });
+
+    // Month navigation
+    prevMonthBtn.addEventListener('click', () => {
+      playClickSound();
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderScoreboard();
+      renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+      playClickSound();
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderScoreboard();
+      renderCalendar();
+    });
+
+    todayJumpBtn.addEventListener('click', () => {
+      playClickSound();
+      const now = new Date();
+      currentYear = now.getFullYear();
+      currentMonth = now.getMonth();
+      renderScoreboard();
+      renderCalendar();
+      showToast('오늘 달력으로 이동했습니다.');
+    });
+
+    // Tab switching
+    tabCalendarBtn.addEventListener('click', () => {
+      playClickSound();
+      tabCalendarBtn.classList.add('active');
+      tabDiaryBtn.classList.remove('active');
+      viewCalendar.classList.add('active');
+      viewDiary.classList.remove('active');
+      openStampModalBtn.style.display = 'flex';
+    });
+
+    tabDiaryBtn.addEventListener('click', () => {
+      playClickSound();
+      tabDiaryBtn.classList.add('active');
+      tabCalendarBtn.classList.remove('active');
+      viewDiary.classList.add('active');
+      viewCalendar.classList.remove('active');
+      renderDiaryFeed();
+    });
+
+    // Diary filter chips
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        playClickSound();
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        renderDiaryFeed();
+      });
+    });
+
+    // Sound toggle
+    try {
+      const savedSound = localStorage.getItem(SOUND_KEY);
+      if (savedSound !== null) soundEnabled = (savedSound === 'true');
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+    } catch (e) {}
+
+    soundToggleBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+      try { localStorage.setItem(SOUND_KEY, soundEnabled); } catch (e) {}
+      showToast(soundEnabled ? '효과음이 켜졌습니다.' : '효과음이 꺼졌습니다.');
+    });
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toastMsg.classList.add('show');
+      setTimeout(() => toastMsg.classList.remove('show'), 2200);
+    }
+
+    // Init
+    function init() {
+      renderScoreboard();
+      renderCalendar();
+      renderDiaryFeed();
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
