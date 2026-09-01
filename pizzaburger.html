@@ -5,30 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>우주의 피자버거 캘린더 🍔🍕</title>
   
-  <!-- Google Fonts: Fredoka (Retro Diner Pop) & JetBrains Mono -->
+  <!-- Google Fonts: Pacifico (Vintage Diner Sign) + JetBrains Mono + Pretendard -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=JetBrains+Mono:wght@500;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ==========================================================
-       1. 1960s American Retro Diner Design System
+       Vintage Diner Menu Board — Redesign v2
+       Palette: Maple · Vanilla · Butter · Espresso · Mint · Parchment
        ========================================================== */
     :root {
-      --diner-ketchup: #e11d48;
-      --diner-ketchup-dark: #9f1239;
-      --diner-ketchup-light: #fecdd3;
-      --diner-mustard: #f59e0b;
-      --diner-mustard-dark: #b45309;
-      --diner-mustard-light: #fef3c7;
-      --diner-cream: #fffdf7;
-      --diner-cream-dark: #fbf5e5;
-      --diner-slate: #1f1b18;
-      --diner-charcoal: #2d2621;
-      --diner-border: #e6dfce;
-      --diner-relish: #16a34a;
-      --diner-shadow: 0 10px 25px -4px rgba(31, 27, 24, 0.12), 0 4px 6px -2px rgba(31, 27, 24, 0.05);
-      --diner-press-shadow: 0 3px 0 var(--diner-ketchup-dark);
+      --maple:      #C4622D;   /* warm, appetite-rousing amber-red */
+      --maple-dark: #9A4420;
+      --maple-glow: rgba(196, 98, 45, 0.18);
+      --butter:     #F5C842;   /* sunny, friendly yellow */
+      --butter-dark:#B8891A;
+      --butter-pale: #FEF7D6;
+      --vanilla:    #FFF8EE;   /* warm cream base — not the generic F4F1EA */
+      --espresso:   #2B1D0E;   /* deep coffee brown, richer than near-black */
+      --espresso-mid: #5C3D1E;
+      --parchment:  #F7EDD8;   /* aged menu paper */
+      --parchment-dark: #EDD9B0;
+      --mint:       #3DAA7A;   /* retro diner green accent */
+      --mint-pale:  #D7F2E7;
+      --ink:        #3C2A14;   /* body text */
+      --border:     #DBC89A;   /* warm golden border */
     }
 
     * {
@@ -39,132 +41,130 @@
     }
 
     body {
-      background-color: #2b2520;
-      background-image: 
-        radial-gradient(circle at 50% 20%, #3d342d 0%, #201a16 100%);
+      background-color: #1A120A;
+      background-image: radial-gradient(circle at 50% 0%, #2e1f0e 0%, #100A04 100%);
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--diner-slate);
+      color: var(--ink);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 0;
       overflow-x: hidden;
     }
 
-    /* Mobile Container Frame (Max 430px) */
+    /* ── App Shell ─────────────────────────────────────── */
     .diner-app {
       width: 100%;
       max-width: 430px;
       min-height: 100vh;
-      background: var(--diner-cream);
+      background: var(--vanilla);
       display: flex;
       flex-direction: column;
       position: relative;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
       overflow-x: hidden;
-      padding-bottom: 90px; /* Space for bottom navigation */
+      padding-bottom: 90px;
+      box-shadow: 0 0 60px rgba(0,0,0,0.7);
     }
 
-    /* Checkerboard Retro Strip */
+    /* ── Top Decorative Stripe (single, not two) ─────── */
     .checkerboard-strip {
-      height: 10px;
-      width: 100%;
-      background-color: var(--diner-slate);
-      background-image: 
-        linear-gradient(45deg, var(--diner-cream) 25%, transparent 25%), 
-        linear-gradient(-45deg, var(--diner-cream) 25%, transparent 25%), 
-        linear-gradient(45deg, transparent 75%, var(--diner-cream) 75%), 
-        linear-gradient(-45deg, transparent 75%, var(--diner-cream) 75%);
-      background-size: 14px 14px;
-      background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+      height: 8px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--maple) 0px, var(--maple) 16px,
+        var(--butter) 16px, var(--butter) 32px
+      );
+      flex-shrink: 0;
     }
 
-    /* Retro Diner Header */
+    /* ── Header: Vintage Menu-Board ─────────────────── */
     .diner-header {
-      background: var(--diner-ketchup);
-      background-image: linear-gradient(180deg, #f43f5e 0%, var(--diner-ketchup) 100%);
+      background: var(--espresso);
+      background-image: 
+        radial-gradient(ellipse at 50% -20%, #4a2e10 0%, var(--espresso) 70%);
       color: #ffffff;
-      padding: 18px 18px 16px;
+      padding: 20px 18px 18px;
       text-align: center;
       position: relative;
-      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
     }
 
     .header-top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
+    /* "SINCE 2026" vintage badge */
     .diner-badge {
-      background: var(--diner-mustard);
-      color: var(--diner-slate);
-      font-family: 'Fredoka', cursive;
-      font-size: 0.72rem;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.64rem;
       font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--espresso);
+      background: var(--butter);
       padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.5px;
-      border: 1.5px solid #ffffff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+      border: 1.5px solid var(--butter-dark);
     }
 
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
+    .header-actions { display: flex; gap: 8px; }
 
     .icon-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      color: #ffffff;
-      width: 32px;
-      height: 32px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.85);
+      width: 32px; height: 32px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.15s ease;
+      font-size: 0.9rem;
+      transition: background 0.15s;
     }
+    .icon-btn:active { background: rgba(255,255,255,0.2); }
 
-    .icon-btn:active {
-      transform: scale(0.92);
-      background: rgba(255, 255, 255, 0.35);
-    }
-
+    /* Logo: Pacifico sign-painting feel */
     .diner-logo {
-      font-family: 'Fredoka', cursive;
-      font-size: 1.65rem;
-      font-weight: 700;
+      font-family: 'Pacifico', cursive;
+      font-size: 1.9rem;
+      font-weight: 400;
+      color: var(--butter);
       letter-spacing: -0.5px;
-      text-shadow: 2px 2px 0px var(--diner-ketchup-dark), 0 0 12px rgba(255, 255, 255, 0.4);
+      line-height: 1.1;
+      text-shadow: 
+        2px 3px 0px rgba(0,0,0,0.45),
+        0 0 20px rgba(245,200,66,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .diner-subtitle {
-      font-size: 0.78rem;
-      color: #ffe4e6;
-      font-weight: 500;
-      margin-top: 2px;
-      letter-spacing: 0.2px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+      letter-spacing: 0.5px;
     }
 
-    /* Monthly Matchup Scoreboard */
+    /* Thin gold separator line below header */
+    .diner-header::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--butter), transparent);
+      margin-top: 14px;
+      opacity: 0.5;
+    }
+
+    /* ── Scoreboard Card ─────────────────────────────── */
     .scoreboard-card {
       margin: 16px 16px 12px;
-      background: #ffffff;
-      border: 2px solid var(--diner-slate);
-      border-radius: 20px;
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
       padding: 14px 16px;
-      box-shadow: 4px 4px 0px var(--diner-slate);
-      position: relative;
+      box-shadow: 0 4px 16px rgba(43,29,14,0.1);
     }
 
     .month-nav-row {
@@ -175,335 +175,295 @@
     }
 
     .month-nav-btn {
-      background: var(--diner-cream);
-      border: 1.5px solid var(--diner-slate);
-      border-radius: 10px;
-      padding: 4px 10px;
+      background: var(--vanilla);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 12px;
       font-weight: 700;
+      color: var(--espresso-mid);
       cursor: pointer;
       font-size: 0.85rem;
-      transition: all 0.1s;
+      transition: background 0.1s;
     }
-
     .month-nav-btn:active {
-      transform: translateY(1px);
+      background: var(--parchment-dark);
     }
 
     .current-month-label {
-      font-family: 'Fredoka', cursive;
-      font-size: 1.15rem;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 1.05rem;
       font-weight: 700;
-      color: var(--diner-slate);
+      color: var(--espresso);
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
     .today-jump-btn {
-      font-size: 0.72rem;
-      background: var(--diner-mustard-light);
-      color: var(--diner-mustard-dark);
-      border: 1px solid var(--diner-mustard);
-      border-radius: 6px;
-      padding: 2px 6px;
-      font-weight: 600;
+      font-size: 0.68rem;
+      background: var(--butter-pale);
+      color: var(--butter-dark);
+      border: 1px solid var(--butter);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-weight: 700;
       cursor: pointer;
     }
 
+    /* Score badges instead of grid */
     .score-battle-grid {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    .score-side {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .score-side.right {
-      flex-direction: row-reverse;
-      text-align: right;
-    }
+    .score-side { display: flex; align-items: center; gap: 8px; }
+    .score-side.right { flex-direction: row-reverse; text-align: right; }
 
     .score-emoji {
       font-size: 2rem;
       line-height: 1;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.12));
     }
 
     .score-info .score-label {
-      font-size: 0.74rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      color: #64748b;
+      color: var(--espresso-mid);
+      opacity: 0.7;
     }
 
     .score-info .score-num {
-      font-family: 'Fredoka', cursive;
-      font-size: 1.45rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
       font-weight: 700;
       line-height: 1.1;
     }
 
-    .burger-text { color: var(--diner-ketchup); }
-    .pizza-text { color: var(--diner-mustard-dark); }
+    .burger-text { color: var(--maple); }
+    .pizza-text  { color: var(--butter-dark); }
 
     .vs-emblem {
-      font-family: 'Fredoka', cursive;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #94a3b8;
-      background: #f1f5f9;
-      padding: 3px 6px;
-      border-radius: 8px;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--espresso-mid);
+      opacity: 0.45;
+      letter-spacing: 1px;
     }
 
-    /* Battle Ratio Progress Bar */
+    /* Battle bar — maple vs butter */
     .battle-bar-track {
-      height: 14px;
-      background: var(--diner-mustard);
-      border-radius: 10px;
-      border: 1.5px solid var(--diner-slate);
+      height: 10px;
+      background: var(--butter-pale);
+      border-radius: 99px;
+      border: 1px solid var(--border);
       overflow: hidden;
-      position: relative;
-      display: flex;
     }
 
     .battle-bar-burger {
       height: 100%;
-      background: var(--diner-ketchup);
-      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      border-right: 1.5px solid var(--diner-slate);
+      background: linear-gradient(90deg, var(--maple), #E07040);
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
     }
 
     .leader-announcement {
       margin-top: 8px;
       text-align: center;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--diner-charcoal);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--espresso-mid);
     }
 
-    /* Dual Tab Navigation Switcher */
+    /* ── Tab Switcher ────────────────────────────────── */
     .tab-switcher {
       display: flex;
-      margin: 0 16px 12px;
-      background: #e2dcd0;
+      margin: 0 16px 14px;
+      background: var(--parchment);
       padding: 4px;
-      border-radius: 14px;
-      border: 1.5px solid var(--diner-slate);
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
     }
 
     .tab-btn {
       flex: 1;
-      padding: 8px 12px;
+      padding: 9px 12px;
       border: none;
       background: transparent;
-      border-radius: 10px;
-      font-size: 0.85rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
       font-weight: 700;
-      color: #645a50;
+      color: var(--espresso-mid);
+      opacity: 0.6;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
 
     .tab-btn.active {
-      background: #ffffff;
-      color: var(--diner-slate);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-
-    /* Tab Content Areas */
-    .tab-view {
-      display: none;
-      padding: 0 16px;
-    }
-
-    .tab-view.active {
-      display: block;
+      background: var(--vanilla);
+      color: var(--espresso);
       opacity: 1;
+      box-shadow: 0 1px 4px rgba(43,29,14,0.14);
     }
 
-    /* ==========================================================
-       2. Calendar View Styling
-       ========================================================== */
+    /* ── Tab Content ─────────────────────────────────── */
+    .tab-view { display: none; padding: 0 16px; opacity: 1; }
+    .tab-view.active { display: block; opacity: 1; }
+
+    /* ── Calendar ────────────────────────────────────── */
     .calendar-container {
-      background: #ffffff;
-      border: 2.5px solid var(--diner-slate);
-      border-radius: 20px;
-      padding: 14px 10px 16px;
-      box-shadow: 4px 4px 0px var(--diner-slate);
-      margin-bottom: 20px;
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 12px 10px 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 12px rgba(43,29,14,0.08);
     }
 
     .calendar-weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       text-align: center;
-      font-family: 'Fredoka', cursive;
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      color: #64748b;
-      padding: 6px 0;
-      background: #f3ecd9;
-      border-radius: 10px;
-      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+      color: var(--espresso-mid);
+      opacity: 0.6;
+      padding: 4px 0 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
     }
-
-    .calendar-weekdays .sun { color: var(--diner-ketchup); }
-    .calendar-weekdays .sat { color: #2563eb; }
+    .calendar-weekdays .sun { color: var(--maple); opacity: 1; }
+    .calendar-weekdays .sat { color: #2563eb; opacity: 1; }
 
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
 
     .calendar-cell {
-      min-height: 52px;
-      background: #faf6eb;
-      border: 1.5px solid #e7dfcc;
-      border-radius: 12px;
-      padding: 4px;
+      min-height: 50px;
+      background: var(--vanilla);
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 4px 2px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       position: relative;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background 0.12s, transform 0.1s;
     }
-
-    .calendar-cell:active {
-      transform: scale(0.94);
-    }
+    .calendar-cell:active { transform: scale(0.92); }
 
     .calendar-cell.has-stamp {
-      background: #ffffff;
-      border-color: var(--diner-mustard);
-      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.18);
+      background: #fff;
+      border-color: var(--butter);
     }
 
     .calendar-cell.other-month {
-      opacity: 0.35;
-      background: #f5f0e1;
-      border-color: transparent;
+      opacity: 0.28;
       cursor: default;
     }
 
     .calendar-cell.today {
-      border: 2px solid var(--diner-ketchup) !important;
-      background: #fff1f2;
+      background: #fff5ee !important;
+      border: 1.5px solid var(--maple) !important;
     }
 
     .calendar-cell.today .day-number {
-      background: var(--diner-ketchup);
-      color: #ffffff !important;
+      background: var(--maple);
+      color: #fff !important;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
     }
 
     .day-number {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: var(--diner-slate);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--espresso);
       margin-bottom: 2px;
     }
-
-    .calendar-cell.sun .day-number { color: var(--diner-ketchup); }
+    .calendar-cell.sun .day-number { color: var(--maple); }
     .calendar-cell.sat .day-number { color: #2563eb; }
 
-    /* Stamp Stickers on Calendar */
     .stamp-badge-cluster {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
-      margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
     }
-
     .stamp-sticker {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       line-height: 1;
       opacity: 1;
-      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
     }
-
     .stamp-count-pill {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
-      background: var(--diner-slate);
-      color: #ffffff;
-      font-size: 0.6rem;
+      bottom: 2px; right: 2px;
+      background: var(--espresso);
+      color: #fff;
+      font-size: 0.56rem;
       font-weight: 700;
       padding: 1px 4px;
-      border-radius: 6px;
+      border-radius: 5px;
     }
 
-    /* Quick Guide Box */
+    /* Hint box */
     .diner-hint-box {
-      background: #fdfaf0;
-      border: 1px dashed var(--diner-mustard-dark);
-      border-radius: 12px;
+      background: var(--mint-pale);
+      border: 1px solid var(--mint);
+      border-radius: 10px;
       padding: 10px 14px;
-      font-size: 0.78rem;
-      color: #645a50;
+      font-size: 0.76rem;
+      color: #1a6649;
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 24px;
     }
 
-    /* ==========================================================
-       3. Food Diary Feed Styling
-       ========================================================== */
+    /* ── Diary Feed ──────────────────────────────────── */
     .diary-controls-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
     }
-
-    .diary-filter-chips {
-      display: flex;
-      gap: 6px;
-    }
+    .diary-filter-chips { display: flex; gap: 6px; }
 
     .filter-chip {
-      background: #ffffff;
-      border: 1.5px solid var(--diner-slate);
-      border-radius: 20px;
-      padding: 4px 10px;
-      font-size: 0.74rem;
+      background: var(--vanilla);
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
-      color: #64748b;
-      transition: all 0.15s;
+      color: var(--espresso-mid);
+      transition: all 0.12s;
     }
-
     .filter-chip.active {
-      background: var(--diner-slate);
-      color: #ffffff;
+      background: var(--espresso);
+      color: #fff;
+      border-color: var(--espresso);
     }
 
     .diary-count-label {
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      color: #78716c;
+      color: var(--espresso-mid);
+      opacity: 0.6;
     }
 
     .diary-feed {
@@ -516,28 +476,24 @@
     .diary-empty-state {
       text-align: center;
       padding: 40px 20px;
-      background: #ffffff;
-      border: 2px dashed var(--diner-border);
-      border-radius: 20px;
-      color: #94a3b8;
+      background: var(--parchment);
+      border: 1.5px dashed var(--border);
+      border-radius: 16px;
+      color: var(--espresso-mid);
+      opacity: 0.6;
     }
+    .diary-empty-icon { font-size: 3rem; margin-bottom: 8px; }
 
-    .diary-empty-icon {
-      font-size: 3rem;
-      margin-bottom: 8px;
-    }
-
-    /* Food Diary Card */
+    /* Diary Card — warmer parchment feel */
     .diary-card {
-      background: #ffffff;
-      border: 2px solid var(--diner-slate);
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
       border-radius: 18px;
       padding: 14px;
-      box-shadow: 3px 3px 0px var(--diner-slate);
+      box-shadow: 0 3px 14px rgba(43,29,14,0.09);
       display: flex;
       flex-direction: column;
       gap: 10px;
-      position: relative;
     }
 
     .card-top {
@@ -551,21 +507,20 @@
       align-items: center;
       gap: 4px;
       padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.72rem;
+      border-radius: 99px;
+      font-size: 0.7rem;
       font-weight: 700;
-      color: #ffffff;
     }
-
-    .card-type-badge.burger { background: var(--diner-ketchup); }
-    .card-type-badge.pizza { background: var(--diner-mustard); color: var(--diner-slate); }
-    .card-type-badge.both { background: #8b5cf6; }
+    .card-type-badge.burger { background: #FDEADF; color: var(--maple-dark); }
+    .card-type-badge.pizza  { background: var(--butter-pale); color: var(--butter-dark); }
+    .card-type-badge.both   { background: #EDE9FF; color: #5B21B6; }
 
     .card-date {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      color: #64748b;
+      color: var(--espresso-mid);
+      opacity: 0.55;
     }
 
     .card-photo-box {
@@ -573,375 +528,253 @@
       height: 180px;
       border-radius: 12px;
       overflow: hidden;
-      background: #f8fafc;
-      border: 1px solid var(--diner-border);
+      background: var(--parchment-dark);
+      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
     }
-
-    .card-photo-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
+    .card-photo-img { width: 100%; height: 100%; object-fit: cover; }
     .card-photo-fallback {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #94a3b8;
-      font-size: 2.5rem;
+      display: flex; flex-direction: column; align-items: center;
+      color: var(--espresso-mid); opacity: 0.35;
+      font-size: 2.8rem;
     }
 
     .card-content h3 {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
-      color: var(--diner-slate);
+      color: var(--espresso);
       margin-bottom: 4px;
+      line-height: 1.3;
     }
-
     .card-meta-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 6px;
     }
-
     .store-tag {
-      font-size: 0.74rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      color: var(--diner-mustard-dark);
-      background: var(--diner-mustard-light);
+      color: var(--mint);
+      background: var(--mint-pale);
       padding: 2px 8px;
-      border-radius: 6px;
+      border-radius: 5px;
     }
-
-    .rating-stars {
-      color: #f59e0b;
-      font-size: 0.95rem;
-      letter-spacing: -1px;
-    }
+    .rating-stars { color: var(--butter-dark); font-size: 0.95rem; letter-spacing: -1px; }
 
     .card-review {
-      font-size: 0.85rem;
-      color: #475569;
-      line-height: 1.45;
-      background: #fdfaf2;
+      font-size: 0.82rem;
+      color: var(--espresso-mid);
+      line-height: 1.5;
+      background: rgba(255,255,255,0.6);
       padding: 8px 10px;
-      border-radius: 10px;
-      border-left: 3px solid var(--diner-ketchup);
+      border-radius: 8px;
+      border-left: 2.5px solid var(--maple);
       font-style: italic;
     }
-
     .card-actions {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-      margin-top: 4px;
     }
-
     .btn-card-action {
       background: transparent;
-      border: 1px solid var(--diner-border);
-      color: #94a3b8;
-      font-size: 0.72rem;
+      border: 1px solid var(--border);
+      color: var(--espresso-mid);
+      opacity: 0.6;
+      font-size: 0.7rem;
       font-weight: 600;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 8px;
       cursor: pointer;
     }
 
-    .btn-card-action:hover {
-      color: var(--diner-ketchup);
-      border-color: var(--diner-ketchup);
-    }
-
-    /* Floating Action Button (도장 쾅! 찍기) */
+    /* ── FAB — the ONE place with bold shadow ─────────── */
     .fab-stamp-btn {
       position: fixed;
       bottom: 22px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 90;
-      background: var(--diner-ketchup);
-      background-image: linear-gradient(135deg, #f43f5e 0%, var(--diner-ketchup) 100%);
-      color: #ffffff;
-      border: 2.5px solid var(--diner-slate);
-      border-radius: 30px;
-      padding: 12px 24px;
-      font-family: 'Fredoka', cursive;
-      font-size: 1.05rem;
-      font-weight: 700;
+      background: var(--maple);
+      background-image: linear-gradient(135deg, #D97040 0%, var(--maple) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      padding: 14px 28px;
+      font-family: 'Pacifico', cursive;
+      font-size: 1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 8px 20px rgba(225, 29, 72, 0.4), 3px 3px 0 var(--diner-slate);
-      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+      /* Single bold shadow — the signature moment */
+      box-shadow:
+        0 6px 24px rgba(196,98,45,0.5),
+        0 2px 6px rgba(0,0,0,0.25);
+      transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s;
     }
-
     .fab-stamp-btn:active {
-      transform: translateX(-50%) scale(0.95) translateY(2px);
-      box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3), 1px 1px 0 var(--diner-slate);
+      transform: translateX(-50%) scale(0.95);
+      box-shadow: 0 3px 10px rgba(196,98,45,0.4);
     }
 
-    /* ==========================================================
-       4. Stamp & Review Modal
-       ========================================================== */
+    /* ── Modal ───────────────────────────────────────── */
     .modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(31, 27, 24, 0.75);
-      backdrop-filter: blur(4px);
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(16,8,2,0.72);
+      backdrop-filter: blur(5px);
       z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 16px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
     }
-
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
 
     .stamp-window {
-      background: var(--diner-cream);
-      border: 3px solid var(--diner-slate);
-      border-radius: 26px;
-      width: 100%;
-      max-width: 390px;
-      max-height: 90vh;
+      background: var(--vanilla);
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      width: 100%; max-width: 390px; max-height: 90vh;
       overflow-y: auto;
       padding: 22px 18px 20px;
-      box-shadow: 6px 6px 0px var(--diner-slate);
-      transform: translateY(20px) scale(0.96);
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position: relative;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 8px 20px rgba(0,0,0,0.15);
+      transform: translateY(18px) scale(0.96);
+      transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
     }
-
-    .modal-backdrop.open .stamp-window {
-      transform: translateY(0) scale(1);
-    }
+    .modal-backdrop.open .stamp-window { transform: translateY(0) scale(1); }
 
     .modal-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
     }
-
     .modal-title {
-      font-family: 'Fredoka', cursive;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--diner-ketchup);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-family: 'Pacifico', cursive;
+      font-size: 1.25rem;
+      color: var(--maple);
+      display: flex; align-items: center; gap: 6px;
     }
-
     .modal-close-btn {
-      background: #f1f5f9;
-      border: 1.5px solid var(--diner-slate);
+      background: var(--parchment);
+      border: 1px solid var(--border);
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--espresso-mid);
       font-weight: 700;
       cursor: pointer;
     }
 
-    /* Food Type Selector Pills */
-    .form-group {
-      margin-bottom: 14px;
-    }
-
+    .form-group { margin-bottom: 14px; }
     .form-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--diner-slate);
-      margin-bottom: 6px;
-      display: block;
+      font-size: 0.78rem; font-weight: 700;
+      color: var(--espresso); margin-bottom: 6px; display: block;
     }
 
     .type-selector-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
     }
-
     .type-radio-btn {
-      background: #ffffff;
-      border: 2px solid var(--diner-border);
-      border-radius: 14px;
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       padding: 10px 6px;
       text-align: center;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.15s;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      transition: all 0.12s;
     }
-
-    .type-radio-btn .icon { font-size: 1.6rem; }
-    .type-radio-btn .txt { font-size: 0.78rem; font-weight: 700; color: #64748b; }
-
+    .type-radio-btn .icon { font-size: 1.55rem; }
+    .type-radio-btn .txt { font-size: 0.76rem; font-weight: 700; color: var(--espresso-mid); }
     .type-radio-btn.selected {
-      border-color: var(--diner-ketchup);
-      background: #fff1f2;
-      box-shadow: 0 4px 10px rgba(225, 29, 72, 0.15);
+      border-color: var(--maple);
+      background: #FFF0E8;
     }
-    .type-radio-btn.selected .txt { color: var(--diner-ketchup); }
+    .type-radio-btn.selected .txt { color: var(--maple); }
 
     .input-text {
       width: 100%;
       padding: 10px 12px;
-      background: #ffffff;
-      border: 1.5px solid var(--diner-border);
-      border-radius: 12px;
-      font-size: 0.88rem;
-      color: var(--diner-slate);
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .input-text:focus {
-      border-color: var(--diner-ketchup);
-    }
-
-    .star-rating-selector {
-      display: flex;
-      gap: 8px;
-      font-size: 1.8rem;
-      cursor: pointer;
-      margin-top: 4px;
-    }
-
-    .star-item {
-      color: #cbd5e1;
-      transition: transform 0.1s, color 0.1s;
-    }
-
-    .star-item.active {
-      color: #f59e0b;
-      transform: scale(1.08);
-    }
-
-    /* Photo Upload Box */
-    .photo-upload-area {
-      border: 2px dashed var(--diner-border);
-      border-radius: 14px;
-      padding: 12px;
-      text-align: center;
-      background: #ffffff;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .photo-preview-img {
-      width: 100%;
-      max-height: 140px;
-      object-fit: cover;
+      background: #fff;
+      border: 1.5px solid var(--border);
       border-radius: 10px;
-      display: none;
+      font-size: 0.86rem;
+      color: var(--espresso);
+      outline: none;
+      transition: border-color 0.12s;
     }
+    .input-text:focus { border-color: var(--maple); }
 
+    .star-rating-selector { display: flex; gap: 8px; font-size: 1.75rem; cursor: pointer; margin-top: 4px; }
+    .star-item { color: var(--border); transition: transform 0.1s, color 0.1s; }
+    .star-item.active { color: var(--butter); transform: scale(1.08); }
+
+    .photo-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 12px; padding: 12px;
+      text-align: center; background: var(--parchment); cursor: pointer;
+    }
+    .photo-preview-img { width: 100%; max-height: 140px; object-fit: cover; border-radius: 8px; display: none; }
     .photo-upload-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: #94a3b8;
-      font-size: 0.78rem;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: var(--espresso-mid); opacity: 0.5; font-size: 0.76rem;
     }
 
-    /* Big Submit Stamp Button */
     .btn-submit-stamp {
       width: 100%;
-      background: var(--diner-ketchup);
-      color: #ffffff;
-      border: 2.5px solid var(--diner-slate);
-      border-radius: 16px;
+      background: var(--maple);
+      background-image: linear-gradient(135deg, #D97040 0%, var(--maple) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
       padding: 14px;
-      font-family: 'Fredoka', cursive;
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-family: 'Pacifico', cursive;
+      font-size: 1.1rem;
       cursor: pointer;
-      box-shadow: 4px 4px 0px var(--diner-slate);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
       margin-top: 18px;
+      box-shadow: 0 4px 16px rgba(196,98,45,0.35);
       transition: all 0.1s;
     }
+    .btn-submit-stamp:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(196,98,45,0.25); }
 
-    .btn-submit-stamp:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0px var(--diner-slate);
-    }
-
-    /* Stamp Slap Animation Overlay */
+    /* Stamp slap overlay */
     .stamp-impact-overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0) rotate(-15deg);
-      z-index: 300;
-      pointer-events: none;
-      font-family: 'Fredoka', cursive;
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: var(--diner-ketchup);
-      border: 6px solid var(--diner-ketchup);
-      padding: 10px 24px;
-      border-radius: 24px;
-      background: rgba(255, 253, 245, 0.95);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) scale(0) rotate(-12deg);
+      z-index: 300; pointer-events: none;
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      color: var(--maple);
+      border: 5px solid var(--maple);
+      padding: 10px 22px;
+      border-radius: 20px;
+      background: rgba(255,248,238,0.96);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
       opacity: 0;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
     }
-
     .stamp-impact-overlay.slammed {
-      transform: translate(-50%, -50%) scale(1) rotate(-8deg);
+      transform: translate(-50%,-50%) scale(1) rotate(-6deg);
       opacity: 1;
     }
 
-    /* Toast Notification */
+    /* Toast */
     .toast-pill {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-30px);
-      background: var(--diner-slate);
-      color: #ffffff;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      z-index: 400;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s ease;
+      position: fixed; top: 20px; left: 50%;
+      transform: translateX(-50%) translateY(-28px);
+      background: var(--espresso);
+      color: rgba(255,248,238,0.92);
+      padding: 8px 18px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600;
+      z-index: 400; opacity: 0; pointer-events: none;
+      transition: all 0.22s ease;
       box-shadow: 0 4px 14px rgba(0,0,0,0.3);
     }
-
-    .toast-pill.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast-pill.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -1067,8 +900,7 @@
       <span>스탬프 쾅! 찍기</span>
     </button>
 
-    <!-- Bottom Checkerboard Border -->
-    <div class="checkerboard-strip" style="position: absolute; bottom: 0; left: 0;"></div>
+
   </div>
 
   <!-- ==================== STAMP MODAL ==================== -->
