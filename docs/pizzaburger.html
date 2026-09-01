@@ -16,21 +16,21 @@
        Palette: Maple · Vanilla · Butter · Espresso · Mint · Parchment
        ========================================================== */
     :root {
-      --maple:      #C4622D;   /* warm, appetite-rousing amber-red */
-      --maple-dark: #9A4420;
-      --maple-glow: rgba(196, 98, 45, 0.18);
-      --butter:     #F5C842;   /* sunny, friendly yellow */
-      --butter-dark:#B8891A;
-      --butter-pale: #FEF7D6;
-      --vanilla:    #FFF8EE;   /* warm cream base — not the generic F4F1EA */
-      --espresso:   #2B1D0E;   /* deep coffee brown, richer than near-black */
-      --espresso-mid: #5C3D1E;
-      --parchment:  #F7EDD8;   /* aged menu paper */
-      --parchment-dark: #EDD9B0;
-      --mint:       #3DAA7A;   /* retro diner green accent */
-      --mint-pale:  #D7F2E7;
-      --ink:        #3C2A14;   /* body text */
-      --border:     #DBC89A;   /* warm golden border */
+      --maple:      #C0343C;   /* vintage cardinal red — deep, warm, not harsh */
+      --maple-dark: #8B2228;
+      --maple-glow: rgba(192, 52, 60, 0.15);
+      --butter:     #F4C430;   /* warm saffron gold — pops on red & white */
+      --butter-dark:#A07018;
+      --butter-pale: #FEF8E0;
+      --vanilla:    #FFFAFA;   /* rose-kissed warm white — the app base */
+      --espresso:   #281820;   /* deep burgundy-black, richer than neutral black */
+      --espresso-mid: #5A2832;
+      --parchment:  #FFFFFF;   /* clean white for cards */
+      --parchment-dark: #FFF0F0; /* faint blush for card hovers / photo bg */
+      --mint:       #2E9E6A;   /* slightly cooler mint — better against red */
+      --mint-pale:  #E0F5EC;
+      --ink:        #2A1820;   /* warm near-black with red undertone */
+      --border:     #F0CACA;   /* soft rose border */
     }
 
     * {
@@ -41,8 +41,8 @@
     }
 
     body {
-      background-color: #1A120A;
-      background-image: radial-gradient(circle at 50% 0%, #2e1f0e 0%, #100A04 100%);
+      background-color: #1A0808;
+      background-image: radial-gradient(circle at 50% 0%, #3A1010 0%, #0E0404 100%);
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--ink);
       min-height: 100vh;
@@ -72,16 +72,16 @@
       background: repeating-linear-gradient(
         90deg,
         var(--maple) 0px, var(--maple) 16px,
-        var(--butter) 16px, var(--butter) 32px
+        #ffffff 16px, #ffffff 32px
       );
       flex-shrink: 0;
     }
 
     /* ── Header: Vintage Menu-Board ─────────────────── */
     .diner-header {
-      background: var(--espresso);
+      background: var(--maple);
       background-image: 
-        radial-gradient(ellipse at 50% -20%, #4a2e10 0%, var(--espresso) 70%);
+        radial-gradient(ellipse at 50% -20%, #D94550 0%, var(--maple) 65%);
       color: #ffffff;
       padding: 20px 18px 18px;
       text-align: center;
@@ -101,11 +101,11 @@
       font-size: 0.64rem;
       font-weight: 700;
       letter-spacing: 1.5px;
-      color: var(--espresso);
-      background: var(--butter);
+      color: var(--maple);
+      background: rgba(255,255,255,0.95);
       padding: 3px 10px;
       border-radius: 4px;
-      border: 1.5px solid var(--butter-dark);
+      border: 1.5px solid rgba(255,255,255,0.7);
     }
 
     .header-actions { display: flex; gap: 8px; }
@@ -147,14 +147,13 @@
       letter-spacing: 0.5px;
     }
 
-    /* Thin gold separator line below header */
+    /* Thin white separator line below header */
     .diner-header::after {
       content: '';
       display: block;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--butter), transparent);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
       margin-top: 14px;
-      opacity: 0.5;
     }
 
     /* ── Scoreboard Card ─────────────────────────────── */
@@ -599,7 +598,7 @@
       transform: translateX(-50%);
       z-index: 90;
       background: var(--maple);
-      background-image: linear-gradient(135deg, #D97040 0%, var(--maple) 100%);
+      background-image: linear-gradient(135deg, #D9454E 0%, #A02830 100%);
       color: #fff;
       border: none;
       border-radius: 28px;
@@ -612,13 +611,13 @@
       gap: 8px;
       /* Single bold shadow — the signature moment */
       box-shadow:
-        0 6px 24px rgba(196,98,45,0.5),
-        0 2px 6px rgba(0,0,0,0.25);
+        0 6px 24px rgba(192,52,60,0.45),
+        0 2px 6px rgba(0,0,0,0.2);
       transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s;
     }
     .fab-stamp-btn:active {
       transform: translateX(-50%) scale(0.95);
-      box-shadow: 0 3px 10px rgba(196,98,45,0.4);
+      box-shadow: 0 3px 10px rgba(192,52,60,0.35);
     }
 
     /* ── Modal ───────────────────────────────────────── */
@@ -726,7 +725,7 @@
     .btn-submit-stamp {
       width: 100%;
       background: var(--maple);
-      background-image: linear-gradient(135deg, #D97040 0%, var(--maple) 100%);
+      background-image: linear-gradient(135deg, #D9454E 0%, #A02830 100%);
       color: #fff;
       border: none;
       border-radius: 14px;
@@ -736,10 +735,10 @@
       cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       margin-top: 18px;
-      box-shadow: 0 4px 16px rgba(196,98,45,0.35);
+      box-shadow: 0 4px 16px rgba(192,52,60,0.32);
       transition: all 0.1s;
     }
-    .btn-submit-stamp:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(196,98,45,0.25); }
+    .btn-submit-stamp:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(192,52,60,0.2); }
 
     /* Stamp slap overlay */
     .stamp-impact-overlay {
