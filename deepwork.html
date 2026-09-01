@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>깊은 집중 산행 일지 — Deep Work Mountain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Pretendard:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       Alpine Field Instrument & Cartographic Palette
+       ========================================================================== */
+    :root {
+      --granite-deep: #101418;
+      --granite-surface: #171d23;
+      --granite-raised: #1f2730;
+      --contour-border: rgba(255, 255, 255, 0.09);
+      --contour-subtle: rgba(255, 255, 255, 0.05);
+
+      --snow-chalk: #f1f5f9;
+      --mist-gray: #94a3b8;
+      --slate-faint: #64748b;
+
+      /* Distinctive Alpine Accents */
+      --alpine-evergreen: #1d7452;
+      --alpine-evergreen-bright: #299b6f;
+      --beacon-terracotta: #c85a32;
+      --beacon-terracotta-bright: #de6e43;
+      --summit-brass: #d4a359;
+      --contour-cyan: #3da5c7;
+
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: #0c0f12;
+      color: var(--snow-chalk);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(29, 116, 82, 0.12) 0%, transparent 70%),
+        radial-gradient(circle at 100% 100%, rgba(61, 165, 199, 0.06) 0%, transparent 60%);
+    }
+
+    /* Mobile Viewport Instrument Frame */
+    .field-notebook {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--granite-deep);
+      border-left: 1px solid var(--contour-border);
+      border-right: 1px solid var(--contour-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 450px) {
+      .field-notebook {
+        height: min(890px, 96vh);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 32px;
+        box-shadow: 
+          0 0 0 1px rgba(0, 0, 0, 0.5),
+          0 24px 60px -12px rgba(0, 0, 0, 0.85);
+      }
+    }
+
+    /* Top Journal Header */
+    header {
+      padding: calc(14px + var(--safe-top)) 20px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--contour-subtle);
+      background: rgba(16, 20, 24, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 20;
+    }
+
+    .journal-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .journal-date {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--mist-gray);
+      letter-spacing: -0.2px;
+    }
+
+    .journal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--snow-chalk);
+      letter-spacing: -0.4px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .journal-title .badge-symbol {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--alpine-evergreen-bright);
+      box-shadow: 0 0 8px var(--alpine-evergreen-bright);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-btn {
+      background: var(--granite-surface);
+      border: 1px solid var(--contour-border);
+      color: var(--mist-gray);
+      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+    }
+
+    .tool-btn:active {
+      background: var(--granite-raised);
+      transform: scale(0.95);
+    }
+
+    .tool-btn.active {
+      color: var(--summit-brass);
+      border-color: rgba(212, 163, 89, 0.35);
+      background: rgba(212, 163, 89, 0.1);
+    }
+
+    .tool-btn.playing {
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.5);
+      background: rgba(41, 155, 111, 0.2);
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Scenic Canvas Hero Section */
+    .panorama-section {
+      position: relative;
+      width: 100%;
+      height: 310px;
+      flex-shrink: 0;
+      background: #121820;
+      overflow: hidden;
+      border-bottom: 1px solid var(--contour-border);
+    }
+
+    #mountainCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Overlay Altimeter & Telemetry */
+    .altimeter-hud {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .telemetry-chip {
+      background: rgba(16, 20, 24, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--snow-chalk);
+      letter-spacing: 0.2px;
+    }
+
+    .telemetry-chip .coord-num {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--summit-brass);
+    }
+
+    .status-stamp {
+      background: rgba(16, 20, 24, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--contour-border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.25s ease;
+    }
+
+    .status-stamp.climbing {
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.35);
+      background: rgba(29, 116, 82, 0.4);
+    }
+
+    .status-stamp.resting {
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, 0.35);
+      background: rgba(200, 90, 50, 0.35);
+    }
+
+    .status-stamp.summit {
+      color: var(--summit-brass);
+      border-color: rgba(212, 163, 89, 0.5);
+      background: rgba(212, 163, 89, 0.25);
+    }
+
+    .checkpoint-hud {
+      position: absolute;
+      bottom: 10px;
+      left: 16px;
+      font-size: 0.72rem;
+      color: rgba(241, 245, 249, 0.8);
+      background: rgba(16, 20, 24, 0.75);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--contour-subtle);
+      backdrop-filter: blur(6px);
+      letter-spacing: -0.2px;
+    }
+
+    /* Unified Instrument Console (Bottom Area) */
+    .console-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px calc(18px + var(--safe-bottom));
+      gap: 16px;
+      overflow-y: auto;
+      background: linear-gradient(180deg, var(--granite-surface) 0%, var(--granite-deep) 100%);
+    }
+
+    /* Precision Chronometer Meter */
+    .chronometer-gauge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 10px;
+      position: relative;
+    }
+
+    .gauge-eyebrow {
+      font-size: 0.74rem;
+      color: var(--mist-gray);
+      letter-spacing: 0.2px;
+      margin-bottom: 6px;
+    }
+
+    .chronometer-digits {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+      font-size: 3.1rem;
+      font-weight: 600;
+      color: var(--snow-chalk);
+      line-height: 1;
+      letter-spacing: -1.5px;
+      margin: 2px 0 6px;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .gauge-subtext {
+      font-size: 0.8rem;
+      color: var(--slate-faint);
+    }
+
+    /* Topographic Progress Trail */
+    .trail-progress-container {
+      width: 100%;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .trail-bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .trail-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--alpine-evergreen-bright) 0%, var(--contour-cyan) 60%, var(--summit-brass) 100%);
+      border-radius: 4px;
+      transition: width 0.35s ease;
+    }
+
+    .trail-milestones {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      font-size: 0.68rem;
+      color: var(--slate-faint);
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+
+    .milestone-node.passed {
+      color: var(--mist-gray);
+      font-weight: 600;
+    }
+
+    .milestone-node.active {
+      color: var(--snow-chalk);
+      font-weight: 700;
+    }
+
+    /* Action Control Deck */
+    .action-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-act {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 600;
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      letter-spacing: -0.3px;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-act:active {
+      transform: scale(0.98);
+    }
+
+    /* Start / Climb State */
+    .btn-primary-climb {
+      background-color: var(--alpine-evergreen);
+      color: #ffffff;
+      box-shadow: 
+        0 4px 16px rgba(29, 116, 82, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary-climb:hover {
+      background-color: var(--alpine-evergreen-bright);
+    }
+
+    /* Rest / Pause State */
+    .btn-primary-rest {
+      background-color: var(--beacon-terracotta);
+      color: #ffffff;
+      box-shadow: 
+        0 4px 16px rgba(200, 90, 50, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary-rest:hover {
+      background-color: var(--beacon-terracotta-bright);
+    }
+
+    /* Complete Hike Button */
+    .btn-secondary-log {
+      background: var(--granite-raised);
+      border: 1px solid var(--contour-border);
+      color: var(--mist-gray);
+      padding: 13px 18px;
+      font-size: 0.92rem;
+    }
+
+    .btn-secondary-log:hover {
+      color: var(--snow-chalk);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary-log.summit-ready {
+      background: linear-gradient(135deg, var(--summit-brass) 0%, #b38038 100%);
+      color: #0c0f12;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(212, 163, 89, 0.4);
+    }
+
+    /* Auxiliary utilities */
+    .sub-deck {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    .btn-quiet {
+      background: transparent;
+      border: none;
+      color: var(--slate-faint);
+      font-size: 0.76rem;
+      cursor: pointer;
+      padding: 4px 6px;
+      transition: color 0.15s;
+    }
+
+    .btn-quiet:hover {
+      color: var(--mist-gray);
+    }
+
+    .progress-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--slate-faint);
+    }
+
+    /* Field Journal Footer Card */
+    .journal-record-card {
+      margin-top: auto;
+      background: var(--granite-deep);
+      border: 1px solid var(--contour-border);
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .record-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .record-cell .val {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--snow-chalk);
+      letter-spacing: -0.3px;
+    }
+
+    .record-cell .lbl {
+      font-size: 0.7rem;
+      color: var(--slate-faint);
+    }
+
+    .record-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--contour-border);
+    }
+
+    /* Elevation Summit Modal */
+    .modal-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(12, 15, 18, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background: var(--granite-surface);
+      border: 1px solid rgba(212, 163, 89, 0.4);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 350px;
+      padding: 28px 22px 22px;
+      text-align: center;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+      transform: translateY(12px);
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .modal-backdrop.open .modal-window {
+      transform: translateY(0);
+    }
+
+    .modal-emblem {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .modal-heading {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--snow-chalk);
+      margin-bottom: 6px;
+    }
+
+    .modal-body {
+      font-size: 0.85rem;
+      color: var(--mist-gray);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .modal-stats-box {
+      background: var(--granite-deep);
+      border: 1px solid var(--contour-subtle);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .modal-stats-box .st-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--summit-brass);
+    }
+
+    .modal-stats-box .st-txt {
+      font-size: 0.7rem;
+      color: var(--slate-faint);
+    }
+
+    .btn-modal-dismiss {
+      width: 100%;
+      background: var(--alpine-evergreen);
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 13px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Battle Mode Modal & Animation */
+    .battle-window {
+      background: #141720;
+      border: 1.5px solid rgba(239, 68, 68, 0.6);
+      border-radius: 26px;
+      width: 100%;
+      max-width: 380px;
+      padding: 22px 20px 20px;
+      text-align: center;
+      box-shadow: 
+        0 0 35px rgba(239, 68, 68, 0.35),
+        0 25px 60px rgba(0, 0, 0, 0.9);
+      transform: translateY(12px);
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+    }
+
+    .modal-backdrop.open .battle-window {
+      transform: translateY(0);
+    }
+
+    .battle-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #f87171;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      animation: alert-pulse 1.2s infinite;
+    }
+
+    @keyframes alert-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .monster-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .monster-avatar {
+      font-size: 3.4rem;
+      line-height: 1;
+      margin-bottom: 6px;
+      display: inline-block;
+      transition: transform 0.15s;
+    }
+
+    .monster-avatar.hit {
+      animation: monster-damage 0.4s ease;
+    }
+
+    @keyframes monster-damage {
+      0% { transform: scale(1) translateX(0); filter: brightness(2) drop-shadow(0 0 12px red); }
+      25% { transform: scale(0.9) translateX(-8px); }
+      50% { transform: scale(0.9) translateX(8px); }
+      75% { transform: scale(0.95) translateX(-4px); }
+      100% { transform: scale(1) translateX(0); }
+    }
+
+    .monster-name {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--snow-chalk);
+      margin-bottom: 4px;
+    }
+
+    .monster-hp-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 1.15rem;
+      margin-top: 2px;
+    }
+
+    .battle-quiz-card {
+      background: var(--granite-surface);
+      border: 1px solid var(--contour-border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .battle-quiz-q {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--snow-chalk);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .quiz-options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt-btn {
+      background: var(--granite-raised);
+      border: 1px solid var(--contour-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: var(--snow-chalk);
+      font-size: 0.84rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .quiz-opt-btn:active {
+      transform: scale(0.98);
+    }
+
+    .quiz-opt-btn.correct {
+      background: rgba(34, 197, 94, 0.25) !important;
+      border-color: #22c55e !important;
+      color: #86efac !important;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .battle-victory-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-resume-climb {
+      width: 100%;
+      background: linear-gradient(135deg, var(--alpine-evergreen-bright) 0%, var(--alpine-evergreen) 100%);
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(41, 155, 111, 0.4);
+    }
+
+    /* Minimalist notification toast */
+    .toast-pill {
+      position: absolute;
+      top: 66px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      background: rgba(23, 29, 35, 0.96);
+      border: 1px solid var(--contour-border);
+      color: var(--snow-chalk);
+      padding: 7px 14px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.2s ease;
+      z-index: 60;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+    }
+
+    .toast-pill.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="field-notebook">
+    <!-- Header -->
+    <header>
+      <div class="journal-meta">
+        <span class="journal-date" id="currentDateLabel">9월 2일 수요일</span>
+        <h1 class="journal-title">
+          <span class="badge-symbol"></span>
+          <span id="mountainTitle" style="cursor:pointer;" title="클릭하여 산 이름 변경">딥워크 마운틴</span>
+          <span style="font-size:0.75rem; color:var(--slate-faint); font-weight:400; cursor:pointer;" id="editTitleBtn" title="이름 수정">✏️</span>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <button class="tool-btn" id="bgmBtn" title="산행 앰비언트 브금(BGM) 켜기/끄기" aria-label="브금">
+          <span id="bgmIcon">🎵</span>
+        </button>
+        <button class="tool-btn" id="soundBtn" title="효과음 켜기/끄기" aria-label="사운드">
+          <span id="soundIcon">🔊</span>
+        </button>
+        <button class="tool-btn" id="speedTestBtn" title="10배속 테스트 모드" aria-label="배속">
+          <span style="font-family:'JetBrains Mono',monospace; font-size: 0.72rem; font-weight: 600;">10x</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scenic Mountain Canvas -->
+    <div class="panorama-section">
+      <canvas id="mountainCanvas"></canvas>
+      
+      <!-- Overlaid Telemetry HUD -->
+      <div class="altimeter-hud">
+        <div class="telemetry-chip">
+          <span>고도</span>
+          <span class="coord-num" id="altitudeText">0m</span>
+          <span style="color:var(--slate-faint);">/ 1,950m</span>
+        </div>
+        <div class="status-stamp" id="statusStamp">
+          <span>대기</span>
+        </div>
+      </div>
+
+      <div class="checkpoint-hud" id="checkpointHud">
+        기점: 중산리 베이스캠프
+      </div>
+    </div>
+
+    <!-- Console Panel -->
+    <div class="console-panel">
+      
+      <!-- Chronometer Display -->
+      <div class="chronometer-gauge">
+        <span class="gauge-eyebrow">오늘의 목표 · 4시간 산행 집중</span>
+        <div class="chronometer-digits" id="timerDisplay">00:00:00</div>
+        <span class="gauge-subtext" id="remainingTimeText">정상까지 4시간 00분 남음</span>
+
+        <!-- Topographic Waypoints -->
+        <div class="trail-progress-container">
+          <div class="trail-bar-track">
+            <div class="trail-bar-fill" id="progressBarFill"></div>
+          </div>
+          <div class="trail-milestones">
+            <span class="milestone-node active">출발 (0h)</span>
+            <span class="milestone-node">숲길 (1h)</span>
+            <span class="milestone-node">약수터 (2h)</span>
+            <span class="milestone-node">능선 (3h)</span>
+            <span class="milestone-node">정상 (4h)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Control Deck -->
+      <div class="action-deck">
+        <!-- Main Toggle: Climb / Rest -->
+        <button class="btn-act btn-primary-climb" id="toggleHikeBtn">
+          <span id="toggleHikeIcon">🥾</span>
+          <span id="toggleHikeText">등산 시작</span>
+        </button>
+
+        <!-- Log & Complete -->
+        <button class="btn-act btn-secondary-log" id="completeHikeBtn">
+          <span id="completeHikeIcon">🚩</span>
+          <span id="completeHikeText">오늘의 산행 일지 기록</span>
+        </button>
+
+        <div class="sub-deck">
+          <button class="btn-quiet" id="resetBtn">시간 초기화</button>
+          <span class="progress-pill" id="percentText">진행률 0%</span>
+        </div>
+      </div>
+
+      <!-- Field Journal Footer Card -->
+      <div class="journal-record-card">
+        <div class="record-cell">
+          <span class="val" id="todayClimbCount">0회</span>
+          <span class="lbl">오늘 정상 완등</span>
+        </div>
+        <div class="record-divider"></div>
+        <div class="record-cell">
+          <span class="val" id="todayTotalFocus">0h 00m</span>
+          <span class="lbl">누적 집중 시간</span>
+        </div>
+        <div class="record-divider"></div>
+        <div class="record-cell">
+          <span class="val" id="recordDateStamp">09.02</span>
+          <span class="lbl">기록일</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Summit Modal -->
+    <div class="modal-backdrop" id="celebrationModal">
+      <div class="modal-window">
+        <div class="modal-emblem">🏔️</div>
+        <h2 class="modal-heading" id="modalTitle">정상 완등 달성</h2>
+        <p class="modal-body" id="modalDesc">
+          4시간의 깊은 집중 산행을 성공적으로 마쳤습니다.<br/>
+          정상 표지석에 당도하여 오늘의 집중 일지에 완등을 기록했습니다.
+        </p>
+        <div class="modal-stats-box">
+          <div>
+            <div class="st-num" id="modalFocusTime">04:00:00</div>
+            <div class="st-txt">집중 등반 시간</div>
+          </div>
+          <div>
+            <div class="st-num" id="modalClimbCount">1회</div>
+            <div class="st-txt">오늘 완등 횟수</div>
+          </div>
+        </div>
+        <button class="btn-modal-dismiss" id="modalCloseBtn">일지 닫기</button>
+      </div>
+    </div>
+
+    <!-- Battle Encounter Modal -->
+    <div class="modal-backdrop" id="battleModal">
+      <div class="battle-window">
+        <div class="battle-header-badge">
+          <span>⚔️</span>
+          <span>야생 몬스터 출현! 전투 돌입</span>
+        </div>
+
+        <div class="monster-stage">
+          <div class="monster-avatar" id="monsterAvatar">🐗</div>
+          <div class="monster-name" id="monsterName">산길의 멧돼지 대장</div>
+          <div class="monster-hp-bar" id="monsterHpBar">
+            <span id="hpHeart1">❤️</span>
+            <span id="hpHeart2">❤️</span>
+            <span id="hpHeart3">❤️</span>
+          </div>
+          <span style="font-size:0.72rem; color:var(--slate-faint); margin-top:2px;" id="battleProgressText">
+            상식 퀴즈 3문제를 맞혀 몬스터를 격퇴하세요! (0/3)
+          </span>
+        </div>
+
+        <!-- Quiz Area -->
+        <div class="battle-quiz-card" id="quizCard">
+          <div class="battle-quiz-q" id="quizQuestionText">Q. 문제를 불러오는 중입니다...</div>
+          <div class="quiz-options-grid" id="quizOptionsGrid">
+            <!-- 4 Options dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- Victory Resolution Box -->
+        <div class="battle-victory-box" id="battleVictoryBox">
+          <div style="font-size:2rem;">🎉</div>
+          <h3 style="font-size:1.15rem; font-weight:700; color:var(--snow-chalk);">몬스터 격퇴 성공!</h3>
+          <p style="font-size:0.84rem; color:var(--mist-gray); line-height:1.4;">
+            등산로를 막고 있던 몬스터를 지혜롭게 물리쳤습니다.<br/>
+            다시 평온한 산행을 이어가세요!
+          </p>
+          <button class="btn-resume-climb" id="btnResumeClimb">산행 계속하기 🥾</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-pill" id="toastMsg">산행 알림</div>
+  </div>
+
+  <script>
+    /* ==========================================================
+       1. Alpine Focus Logic & State Management
+       ========================================================== */
+    const TARGET_SECONDS = 4 * 60 * 60; // 4 hours = 14,400 seconds
+    const STORAGE_KEY = 'deepwork_hiking_state_v3';
+    const RECORDS_KEY = 'deepwork_hiking_records_v3';
+    const MAX_ALTITUDE = 1950; // Jiri-san Cheonwangbong peak metaphor
+
+    const state = {
+      status: 'IDLE', // 'IDLE' | 'CLIMBING' | 'RESTING' | 'SUMMIT' | 'BATTLE'
+      mountainName: '딥워크 마운틴',
+      elapsedSeconds: 0,
+      lastTickTime: null,
+      speedMultiplier: 1,
+      soundEnabled: true,
+      bgmEnabled: true,
+      todayDate: '',
+      todayCompletedCount: 0,
+      todayTotalSeconds: 0,
+      // Battle & Encounter RPG System
+      battleSecondsAccumulator: 0,
+      nextBattleInterval: 15 + Math.random() * 5, // 15 to 20 seconds
+      currentMonster: null,
+      monsterHp: 3,
+      monsterMaxHp: 3,
+      battleQuizQueue: [],
+      currentQuizIndex: 0
+    };
+
+    const MONSTER_LIST = [
+      { name: '산길의 멧돼지 대장', avatar: '🐗', desc: '거친 콧김을 뿜으며 등산로를 가로막았습니다!' },
+      { name: '바위 능선의 암석 골렘', avatar: '🪨', desc: '거대한 바위 주먹을 휘두르며 길을 막아섰습니다!' },
+      { name: '숲속의 붉은 도깨비', avatar: '👺', desc: '지혜의 수수께끼를 풀지 않으면 비켜주지 않는다고 합니다!' },
+      { name: '지리산 반달가슴곰', avatar: '🐻', desc: '묵직한 덩치로 앞길을 막고 등산객의 지혜를 시험합니다!' },
+      { name: '둔갑술의 산여우', avatar: '🦊', desc: '신비한 눈빛으로 등산로에 지혜의 결계를 쳤습니다!' }
+    ];
+
+    const QUIZ_DATABASE = [
+      {
+        q: "우리나라 최초의 한글 소설로 알려진 허균의 작품은 무엇일까요?",
+        opts: ["구운몽", "홍길동전", "춘향전", "사씨남정기"],
+        ans: 1
+      },
+      {
+        q: "인체에서 가장 길고 튼튼한 뼈는 다음 중 무엇일까요?",
+        opts: ["넙다리뼈(대퇴골)", "정강뼈", "위팔뼈", "빗장뼈"],
+        ans: 0
+      },
+      {
+        q: "지중해와 홍해를 연결하여 유럽과 아시아의 해상 항로를 획기적으로 단축한 운하는?",
+        opts: ["파나마 운하", "수에즈 운하", "킬 운하", "코린트 운하"],
+        ans: 1
+      },
+      {
+        q: "조선 시대 과거 시험의 최고 등급(1등) 합격자를 부르던 명칭은?",
+        opts: ["급제", "진사", "장원", "판서"],
+        ans: 2
+      },
+      {
+        q: "지구 대기 성분 중 질소(약 78%) 다음으로 두 번째로 많은 비율을 차지하는 기체는?",
+        opts: ["이산화탄소", "산소", "아르곤", "수소"],
+        ans: 1
+      },
+      {
+        q: "컴퓨터 주기억장치 중 전원이 꺼지면 저장 내용이 사라지는 휘발성 메모리는?",
+        opts: ["ROM", "RAM", "SSD", "HDD"],
+        ans: 1
+      },
+      {
+        q: "혈액 성분 중 산소를 온몸으로 운반하는 역할을 담당하는 세포는?",
+        opts: ["적혈구", "백혈구", "혈소판", "혈장"],
+        ans: 0
+      },
+      {
+        q: "산성도를 나타내는 pH 척도에서 '순수한 중성'을 나타내는 수치는?",
+        opts: ["0", "5", "7", "14"],
+        ans: 2
+      },
+      {
+        q: "조선 후기 정약용이 지방 관리들의 올바른 통치 자세와 도리를 저술한 책은?",
+        opts: ["목민심서", "경세유표", "흠흠신서", "성학십도"],
+        ans: 0
+      },
+      {
+        q: "물이 얼어 얼음이 될 때 부피와 밀도의 물리적 변화로 옳은 것은?",
+        opts: ["부피 증가, 밀도 감소", "부피 감소, 밀도 증가", "부피 증가, 밀도 증가", "부피와 밀도 모두 불변"],
+        ans: 0
+      },
+      {
+        q: "태양계 행성 중 자전축이 약 98도 기울어져 있어 거의 누운 채로 공전하는 행성은?",
+        opts: ["금성", "화성", "천왕성", "해왕성"],
+        ans: 2
+      },
+      {
+        q: "근대 올림픽의 창시자로 '올림픽의 아버지'라 불리는 프랑스의 교육자는?",
+        opts: ["피에르 드 쿠베르탱", "장 자크 루소", "앙리 뒤낭", "페스탈로치"],
+        ans: 0
+      },
+      {
+        q: "오케스트라 현악기군 중 가장 크기가 크고 가장 낮은 음역을 내는 악기는?",
+        opts: ["첼로", "비올라", "콘트라베이스(더블베이스)", "바순"],
+        ans: 2
+      },
+      {
+        q: "고려 시대 몽골의 침입을 불교의 힘으로 물리치고자 제작한 목판 경전은?",
+        opts: ["직지심체요절", "팔만대장경", "삼국유사", "왕오천축국전"],
+        ans: 1
+      },
+      {
+        q: "세계에서 육지 영토 면적이 가장 넓은 국가는 어디일까요?",
+        opts: ["캐나다", "미국", "중국", "러시아"],
+        ans: 3
+      },
+      {
+        q: "조선 세종 대에 장영실 등이 제작한 우리나라 최초의 자동 물시계는?",
+        opts: ["앙부일구", "자격루", "혼천의", "측우기"],
+        ans: 1
+      },
+      {
+        q: "빛이 진공 상태에서 1년 동안 나아가는 거리를 뜻하는 천문학 단위는?",
+        opts: ["천문단위(AU)", "파섹(pc)", "광년(Light-year)", "나노미터"],
+        ans: 2
+      },
+      {
+        q: "식물이 빛 에너지를 이용하여 이산화탄소와 물로부터 포도당과 산소를 만드는 과정은?",
+        opts: ["증산작용", "호흡작용", "광합성", "삼투현상"],
+        ans: 2
+      },
+      {
+        q: "지구 표면의 대략 몇 퍼센트(%)가 바다로 덮여 있을까요?",
+        opts: ["약 51%", "약 61%", "약 71%", "약 81%"],
+        ans: 2
+      },
+      {
+        q: "바흐, 헨델, 비발디 등이 활약한 17~18세기 유럽의 예술/음악 사조는?",
+        opts: ["바로크", "고전주의", "낭만주의", "인상주의"],
+        ans: 0
+      },
+      {
+        q: "대한민국 헌법 제1조 제1항 '대한민국은 ( )이다.'에 들어갈 정확한 헌법 조문은?",
+        opts: ["자유민주공화국", "민주공화국", "복지국가", "입헌공화국"],
+        ans: 1
+      },
+      {
+        q: "물질의 상태 변화 중 고체가 액체를 거치지 않고 곧바로 기체로 변하는 현상은?",
+        opts: ["응고", "기화", "승화", "액화"],
+        ans: 2
+      }
+    ];
+
+    /* ==========================================================
+       2. Web Audio Harmonic Chimes
+       ========================================================== */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.22, gainVal = 0.07) {
+      if (!state.soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function chimeStart() {
+      playTone(392.00, 'triangle', 0.25, 0.08); // G4
+      setTimeout(() => playTone(523.25, 'triangle', 0.35, 0.08), 120); // C5
+    }
+
+    function chimeRest() {
+      playTone(523.25, 'sine', 0.25, 0.06);
+      setTimeout(() => playTone(392.00, 'sine', 0.35, 0.06), 140);
+    }
+
+    function chimeSummit() {
+      const freqs = [392.00, 523.25, 659.25, 783.99];
+      freqs.forEach((f, i) => {
+        setTimeout(() => playTone(f, 'triangle', 0.45, 0.1), i * 140);
+      });
+    }
+
+    /* ==========================================================
+       2.1. Lo-Fi Chill Study & Deep Work (노동요) Procedural Engine
+       ========================================================== */
+    class LofiChillBgmEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.currentMode = null; // 'climb' | 'rest'
+        this.masterGain = null;
+        this.vinylGain = null;
+        this.vinylNode = null;
+        this.wowLfo = null;
+        this.wowGain = null;
+        this.beatTimer = null;
+        this.barStep = 0;
+        this.bpm = 78;
+        this.beatDuration = 60 / this.bpm; // ~0.769s per beat
+      }
+
+      init() {
+        if (this.ctx) return;
+        this.ctx = getAudioContext();
+        if (!this.ctx) return;
+
+        // Master Gain
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(state.bgmEnabled ? 0.55 : 0.0, this.ctx.currentTime);
+
+        // Lo-fi Warmth Filter (Vintage Cassette Tape 4.6kHz Lowpass)
+        const tapeFilter = this.ctx.createBiquadFilter();
+        tapeFilter.type = 'lowpass';
+        tapeFilter.frequency.setValueAtTime(4600, this.ctx.currentTime);
+
+        this.masterGain.connect(tapeFilter);
+        tapeFilter.connect(this.ctx.destination);
+
+        // Analog Wow/Flutter Pitch Modulator (Nostalgic tape flutter)
+        this.wowLfo = this.ctx.createOscillator();
+        this.wowGain = this.ctx.createGain();
+        this.wowLfo.frequency.setValueAtTime(0.35, this.ctx.currentTime);
+        this.wowGain.gain.setValueAtTime(1.8, this.ctx.currentTime);
+        this.wowLfo.connect(this.wowGain);
+        this.wowLfo.start();
+
+        // Vinyl LP Texture Buffer
+        this.initVinyl();
+      }
+
+      initVinyl() {
+        if (!this.ctx) return;
+        const length = this.ctx.sampleRate * 2.0;
+        const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < length; i++) {
+          let sample = (Math.random() * 2 - 1) * 0.012;
+          if (Math.random() < 0.0016) {
+            sample += (Math.random() > 0.5 ? 1 : -1) * (0.06 + Math.random() * 0.10);
+          }
+          data[i] = sample;
+        }
+        this.vinylBuffer = buffer;
+      }
+
+      start(mode = 'climb') {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        if (this.isPlaying && this.currentMode === mode) return;
+        this.stop(0.2);
+        this.isPlaying = true;
+        this.currentMode = mode;
+
+        setTimeout(() => {
+          if (!this.isPlaying) return;
+          if (mode === 'battle') {
+            this.startBattleLoop();
+          } else {
+            this.startVinyl();
+            this.startGrooveLoop(mode);
+          }
+          if (typeof updateBgmUI === 'function') updateBgmUI();
+        }, 50);
+      }
+
+      startVinyl() {
+        if (!this.ctx || !this.vinylBuffer) return;
+        try {
+          this.vinylNode = this.ctx.createBufferSource();
+          this.vinylNode.buffer = this.vinylBuffer;
+          this.vinylNode.loop = true;
+
+          const vinylFilter = this.ctx.createBiquadFilter();
+          vinylFilter.type = 'bandpass';
+          vinylFilter.frequency.setValueAtTime(1800, this.ctx.currentTime);
+          vinylFilter.Q.setValueAtTime(0.8, this.ctx.currentTime);
+
+          this.vinylGain = this.ctx.createGain();
+          const target = state.bgmEnabled ? 0.32 : 0.0;
+          this.vinylGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+          this.vinylGain.gain.linearRampToValueAtTime(target, this.ctx.currentTime + 1.0);
+
+          this.vinylNode.connect(vinylFilter);
+          vinylFilter.connect(this.vinylGain);
+          this.vinylGain.connect(this.masterGain);
+
+          this.vinylNode.start();
+        } catch (e) {}
+      }
+
+      startGrooveLoop(mode) {
+        // Classic Lo-Fi Jazzy 7th/9th Progression (Cmaj9 -> Am9 -> Dm9 -> G13)
+        const progression = [
+          {
+            bass: 65.41, // C2
+            chord: [130.81, 196.00, 246.94, 293.66, 329.63] // C3, G3, B3, D4, E4 (Cmaj9)
+          },
+          {
+            bass: 55.00, // A1
+            chord: [110.00, 164.81, 196.00, 261.63, 329.63] // A2, E3, G3, C4, E4 (Am7/9)
+          },
+          {
+            bass: 73.42, // D2
+            chord: [146.83, 174.61, 220.00, 261.63, 329.63] // D3, F3, A3, C4, E4 (Dm9)
+          },
+          {
+            bass: 49.00, // G1
+            chord: [98.00, 155.56, 196.00, 246.94, 329.63]  // G2, Eb3, G3, B3, E4 (G7#5 / G13)
+          }
+        ];
+
+        this.barStep = 0;
+        let beatInBar = 0;
+        const stepTime = this.beatDuration; // ~769ms per quarter beat
+
+        const tick = () => {
+          if (!this.isPlaying) return;
+
+          const currentHarm = progression[this.barStep];
+
+          // 1. Play Chord & Bass on Beat 1 (and gentle variation on beat 3)
+          if (beatInBar === 0) {
+            this.playRhodesChord(currentHarm.chord, 3.2);
+            this.playSubBass(currentHarm.bass, 1.8);
+          } else if (beatInBar === 2) {
+            this.playRhodesChord(currentHarm.chord.slice(1), 1.6, 0.028);
+          }
+
+          // 2. Play Lo-Fi Chill Drums (Active in 'climb' mode; resting mode keeps only chords & crackle)
+          if (mode === 'climb' && state.bgmEnabled) {
+            if (beatInBar === 0) {
+              this.playKick();
+              this.playHiHat(0.024);
+            } else if (beatInBar === 1) {
+              this.playSnare();
+              this.playHiHat(0.018);
+            } else if (beatInBar === 2) {
+              this.playHiHat(0.020);
+              // Syncopated kick on the "and" of beat 3 (60% into the beat)
+              setTimeout(() => {
+                if (this.isPlaying && this.currentMode === 'climb') {
+                  this.playKick(0.75);
+                  this.playHiHat(0.015);
+                }
+              }, stepTime * 0.58 * 1000);
+            } else if (beatInBar === 3) {
+              this.playSnare();
+              this.playHiHat(0.018);
+            }
+          }
+
+          beatInBar = (beatInBar + 1) % 4;
+          if (beatInBar === 0) {
+            this.barStep = (this.barStep + 1) % progression.length;
+          }
+
+          this.beatTimer = setTimeout(tick, stepTime * 1000);
+        };
+
+        tick();
+      }
+
+      playRhodesChord(chordFreqs, duration = 3.0, vol = 0.046) {
+        if (!this.ctx || !state.bgmEnabled) return;
+        const now = this.ctx.currentTime;
+
+        chordFreqs.forEach((freq, idx) => {
+          try {
+            // Humanized Strum offset
+            const noteStart = now + idx * 0.022;
+
+            const osc1 = this.ctx.createOscillator(); // Body sine
+            const osc2 = this.ctx.createOscillator(); // Tine bell triangle
+            const gain = this.ctx.createGain();
+            const filter = this.ctx.createBiquadFilter();
+
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(freq, noteStart);
+
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(freq * 2.0, noteStart);
+
+            if (this.wowGain) {
+              this.wowGain.connect(osc1.frequency);
+              this.wowGain.connect(osc2.frequency);
+            }
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1200, noteStart);
+            filter.frequency.exponentialRampToValueAtTime(520, noteStart + duration);
+
+            gain.gain.setValueAtTime(0.0001, noteStart);
+            gain.gain.linearRampToValueAtTime(vol, noteStart + 0.035);
+            gain.gain.exponentialRampToValueAtTime(vol * 0.5, noteStart + 0.35);
+            gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + duration);
+
+            osc1.connect(filter);
+            osc2.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.masterGain);
+
+            osc1.start(noteStart);
+            osc2.start(noteStart);
+            osc1.stop(noteStart + duration);
+            osc2.stop(noteStart + duration);
+          } catch (e) {}
+        });
+      }
+
+      playSubBass(freq, duration = 1.6) {
+        if (!this.ctx || !state.bgmEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const filter = this.ctx.createBiquadFilter();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(220, now);
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.linearRampToValueAtTime(0.07, now + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.masterGain);
+
+          osc.start(now);
+          osc.stop(now + duration);
+        } catch (e) {}
+      }
+
+      playKick(scale = 1.0) {
+        if (!this.ctx || !state.bgmEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(95, now);
+          osc.frequency.exponentialRampToValueAtTime(36, now + 0.12);
+
+          gain.gain.setValueAtTime(0.12 * scale, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } catch (e) {}
+      }
+
+      playSnare() {
+        if (!this.ctx || !state.bgmEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+
+          const noiseLen = 0.14;
+          const bufferSize = this.ctx.sampleRate * noiseLen;
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1);
+          }
+
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(1400, now);
+          filter.Q.setValueAtTime(1.2, now);
+
+          const noiseGain = this.ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.065, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + noiseLen);
+
+          noise.connect(filter);
+          filter.connect(noiseGain);
+          noiseGain.connect(this.masterGain);
+
+          noise.start(now);
+          noise.stop(now + noiseLen);
+
+          // Body rim tone
+          const osc = this.ctx.createOscillator();
+          const oscGain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(185, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+
+          oscGain.gain.setValueAtTime(0.045, now);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+          osc.connect(oscGain);
+          oscGain.connect(this.masterGain);
+
+          osc.start(now);
+          osc.stop(now + 0.1);
+        } catch (e) {}
+      }
+
+      playHiHat(vol = 0.02) {
+        if (!this.ctx || !state.bgmEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+          const len = 0.045;
+          const bufferSize = this.ctx.sampleRate * len;
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1);
+          }
+
+          const hat = this.ctx.createBufferSource();
+          hat.buffer = buffer;
+
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'highpass';
+          filter.frequency.setValueAtTime(6500, now);
+
+          const hatGain = this.ctx.createGain();
+          hatGain.gain.setValueAtTime(vol, now);
+          hatGain.gain.exponentialRampToValueAtTime(0.0005, now + len);
+
+          hat.connect(filter);
+          filter.connect(hatGain);
+          hatGain.connect(this.masterGain);
+
+          hat.start(now);
+          hat.stop(now + len);
+        } catch (e) {}
+      }
+
+      /* Tense RPG Encounter Battle Groove (136 BPM) */
+      startBattleLoop() {
+        const battleBassPatterns = [
+          [73.42, 73.42, 87.31, 73.42, 98.00, 73.42, 110.00, 73.42], // Dm
+          [58.27, 58.27, 73.42, 58.27, 87.31, 58.27, 98.00, 58.27],  // Bb
+          [49.00, 49.00, 58.27, 49.00, 73.42, 49.00, 87.31, 49.00],  // Gm
+          [55.00, 55.00, 69.30, 55.00, 82.41, 55.00, 98.00, 55.00]   // A7
+        ];
+
+        const battleChords = [
+          [146.83, 174.61, 220.00, 293.66], // Dm
+          [116.54, 146.83, 174.61, 233.08], // Bb
+          [98.00, 116.54, 146.83, 196.00],  // Gm
+          [110.00, 138.59, 164.81, 220.00]  // A
+        ];
+
+        let bar = 0;
+        let step8th = 0;
+        const stepInterval = (60 / 136) / 2; // 8th note = ~0.22s
+
+        const battleTick = () => {
+          if (!this.isPlaying || this.currentMode !== 'battle') return;
+
+          const pat = battleBassPatterns[bar];
+          const bassFreq = pat[step8th % pat.length];
+
+          // 1. Driving Synth Bass
+          this.playBattleBass(bassFreq);
+
+          // 2. Tense Minor Chord Stabs on beats 1 and 3 (step 0 and 4)
+          if (step8th === 0 || step8th === 4) {
+            this.playBattleStab(battleChords[bar]);
+          }
+
+          // 3. Battle Drums (Driving Four-on-the-floor kick & sharp snares)
+          if (step8th % 2 === 0) {
+            this.playKick(1.15);
+          }
+          if (step8th === 2 || step8th === 6) {
+            this.playSnare();
+          }
+          this.playHiHat(0.026);
+
+          step8th = (step8th + 1) % 8;
+          if (step8th === 0) {
+            bar = (bar + 1) % battleBassPatterns.length;
+          }
+
+          this.beatTimer = setTimeout(battleTick, stepInterval * 1000);
+        };
+
+        battleTick();
+      }
+
+      playBattleBass(freq) {
+        if (!this.ctx || !state.bgmEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const filter = this.ctx.createBiquadFilter();
+
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now);
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(360, now);
+          filter.Q.setValueAtTime(2.5, now);
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.linearRampToValueAtTime(0.075, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.masterGain);
+
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } catch (e) {}
+      }
+
+      playBattleStab(chord) {
+        if (!this.ctx || !state.bgmEnabled) return;
+        const now = this.ctx.currentTime;
+        chord.forEach((freq) => {
+          try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            const filter = this.ctx.createBiquadFilter();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1600, now);
+            filter.frequency.exponentialRampToValueAtTime(450, now + 0.22);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.04, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.masterGain);
+
+            osc.start(now);
+            osc.stop(now + 0.28);
+          } catch (e) {}
+        });
+      }
+
+      playAttackHit() {
+        if (!this.ctx || !state.soundEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(620, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.14);
+
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.17);
+        } catch (e) {}
+      }
+
+      playWrongSound() {
+        if (!this.ctx || !state.soundEnabled) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(130, now);
+          osc.frequency.setValueAtTime(105, now + 0.08);
+
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        } catch (e) {}
+      }
+
+      playVictorySound() {
+        if (!this.ctx || !state.soundEnabled) return;
+        const notes = [261.63, 329.63, 392.00, 523.25];
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            playTone(freq, 'triangle', 0.4, 0.12);
+          }, idx * 110);
+        });
+      }
+
+      stop(fadeTime = 0.8) {
+        if (!this.isPlaying) return;
+        this.isPlaying = false;
+        this.currentMode = null;
+
+        if (this.beatTimer) {
+          clearTimeout(this.beatTimer);
+          this.beatTimer = null;
+        }
+
+        if (this.vinylGain && this.ctx) {
+          try {
+            this.vinylGain.gain.setValueAtTime(this.vinylGain.gain.value, this.ctx.currentTime);
+            this.vinylGain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + fadeTime);
+          } catch (e) {}
+        }
+
+        setTimeout(() => {
+          if (this.vinylNode) {
+            try { this.vinylNode.stop(); } catch (e) {}
+            this.vinylNode = null;
+          }
+          if (typeof updateBgmUI === 'function') updateBgmUI();
+        }, fadeTime * 1000 + 40);
+      }
+
+      setMuted(muted) {
+        if (this.masterGain && this.ctx) {
+          const target = muted ? 0.0 : 0.55;
+          this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, this.ctx.currentTime);
+          this.masterGain.gain.linearRampToValueAtTime(target, this.ctx.currentTime + 0.3);
+        }
+      }
+    }
+
+    const bgm = new LofiChillBgmEngine();
+
+    /* ==========================================================
+       3. DOM Elements
+       ========================================================== */
+    const canvas = document.getElementById('mountainCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const currentDateLabel = document.getElementById('currentDateLabel');
+    const mountainTitle = document.getElementById('mountainTitle');
+    const editTitleBtn = document.getElementById('editTitleBtn');
+    const recordDateStamp = document.getElementById('recordDateStamp');
+    const altitudeText = document.getElementById('altitudeText');
+    const statusStamp = document.getElementById('statusStamp');
+    const checkpointHud = document.getElementById('checkpointHud');
+
+    const timerDisplay = document.getElementById('timerDisplay');
+    const remainingTimeText = document.getElementById('remainingTimeText');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const percentText = document.getElementById('percentText');
+    const milestoneNodes = document.querySelectorAll('.milestone-node');
+
+    const toggleHikeBtn = document.getElementById('toggleHikeBtn');
+    const toggleHikeIcon = document.getElementById('toggleHikeIcon');
+    const toggleHikeText = document.getElementById('toggleHikeText');
+    const completeHikeBtn = document.getElementById('completeHikeBtn');
+    const completeHikeIcon = document.getElementById('completeHikeIcon');
+    const completeHikeText = document.getElementById('completeHikeText');
+    const resetBtn = document.getElementById('resetBtn');
+
+    const bgmBtn = document.getElementById('bgmBtn');
+    const bgmIcon = document.getElementById('bgmIcon');
+    const soundBtn = document.getElementById('soundBtn');
+    const soundIcon = document.getElementById('soundIcon');
+    const speedTestBtn = document.getElementById('speedTestBtn');
+
+    function updateBgmUI() {
+      if (!bgmBtn) return;
+      if (bgm.isPlaying && state.bgmEnabled) {
+        bgmBtn.classList.add('playing');
+        bgmIcon.textContent = '🎶';
+        bgmBtn.title = 'Lo-Fi Chill 노동요 재생 중 (클릭 시 끄기)';
+      } else {
+        bgmBtn.classList.remove('playing');
+        bgmIcon.textContent = '🎵';
+        bgmBtn.title = state.bgmEnabled ? 'Lo-Fi Chill 노동요 켜짐 (산행 시 자동 재생)' : 'Lo-Fi Chill 노동요 꺼짐 (클릭 시 켜기)';
+      }
+    }
+
+    const todayClimbCount = document.getElementById('todayClimbCount');
+    const todayTotalFocus = document.getElementById('todayTotalFocus');
+
+    const celebrationModal = document.getElementById('celebrationModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalFocusTime = document.getElementById('modalFocusTime');
+    const modalClimbCount = document.getElementById('modalClimbCount');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const toastMsg = document.getElementById('toastMsg');
+
+    // Battle Modal DOM
+    const battleModal = document.getElementById('battleModal');
+    const monsterAvatar = document.getElementById('monsterAvatar');
+    const monsterName = document.getElementById('monsterName');
+    const hpHeart1 = document.getElementById('hpHeart1');
+    const hpHeart2 = document.getElementById('hpHeart2');
+    const hpHeart3 = document.getElementById('hpHeart3');
+    const battleProgressText = document.getElementById('battleProgressText');
+    const quizCard = document.getElementById('quizCard');
+    const quizQuestionText = document.getElementById('quizQuestionText');
+    const quizOptionsGrid = document.getElementById('quizOptionsGrid');
+    const battleVictoryBox = document.getElementById('battleVictoryBox');
+    const btnResumeClimb = document.getElementById('btnResumeClimb');
+
+    /* ==========================================================
+       3.1. RPG Monster Encounter & Quiz Logic
+       ========================================================== */
+    function triggerMonsterEncounter() {
+      if (state.status !== 'CLIMBING') return;
+
+      const randomMonster = MONSTER_LIST[Math.floor(Math.random() * MONSTER_LIST.length)];
+      state.status = 'BATTLE';
+      state.currentMonster = randomMonster;
+      state.monsterHp = 3;
+      state.monsterMaxHp = 3;
+      state.currentQuizIndex = 0;
+
+      // Pick 3 unique random quizzes from QUIZ_DATABASE
+      const shuffled = [...QUIZ_DATABASE].sort(() => 0.5 - Math.random());
+      state.battleQuizQueue = shuffled.slice(0, 3);
+
+      // Switch to Tense Battle Theme
+      if (state.bgmEnabled) {
+        bgm.start('battle');
+      }
+
+      // Populate UI
+      monsterAvatar.textContent = randomMonster.avatar;
+      monsterName.textContent = randomMonster.name;
+      updateBattleHpUI();
+
+      quizCard.style.display = 'block';
+      battleVictoryBox.style.display = 'none';
+      renderCurrentQuiz();
+
+      battleModal.classList.add('open');
+      showToast(`⚠️ 야생의 ${randomMonster.name} 출현! 전투 돌입!`);
+      syncUI();
+    }
+
+    function updateBattleHpUI() {
+      hpHeart1.textContent = state.monsterHp >= 1 ? '❤️' : '🤍';
+      hpHeart2.textContent = state.monsterHp >= 2 ? '❤️' : '🤍';
+      hpHeart3.textContent = state.monsterHp >= 3 ? '❤️' : '🤍';
+      const hits = 3 - state.monsterHp;
+      battleProgressText.textContent = `상식 퀴즈 3문제를 맞혀 몬스터를 격퇴하세요! (${hits}/3)`;
+    }
+
+    function renderCurrentQuiz() {
+      if (state.currentQuizIndex >= state.battleQuizQueue.length) return;
+      const quiz = state.battleQuizQueue[state.currentQuizIndex];
+      quizQuestionText.textContent = `Q${state.currentQuizIndex + 1}. ${quiz.q}`;
+
+      quizOptionsGrid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      quiz.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--summit-brass); font-size:0.8rem;">${letters[idx]}.</span> <span>${opt}</span>`;
+        btn.addEventListener('click', () => handleQuizAnswer(btn, idx, quiz.ans));
+        quizOptionsGrid.appendChild(btn);
+      });
+    }
+
+    function handleQuizAnswer(btn, chosenIdx, correctIdx) {
+      if (state.status !== 'BATTLE') return;
+
+      if (chosenIdx === correctIdx) {
+        // Correct Answer
+        btn.classList.add('correct');
+        const allBtns = quizOptionsGrid.querySelectorAll('.quiz-opt-btn');
+        allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+        bgm.playAttackHit();
+        monsterAvatar.classList.add('hit');
+        setTimeout(() => monsterAvatar.classList.remove('hit'), 400);
+
+        state.monsterHp = Math.max(0, state.monsterHp - 1);
+        updateBattleHpUI();
+
+        if (state.monsterHp <= 0) {
+          // Victory!
+          setTimeout(() => {
+            quizCard.style.display = 'none';
+            battleVictoryBox.style.display = 'flex';
+            bgm.playVictorySound();
+            showToast('🎉 몬스터를 물리쳤습니다! 등산로 확보!');
+          }, 450);
+        } else {
+          // Next question
+          state.currentQuizIndex += 1;
+          setTimeout(() => {
+            renderCurrentQuiz();
+          }, 650);
+        }
+      } else {
+        // Wrong Answer
+        btn.classList.add('wrong');
+        bgm.playWrongSound();
+        showToast('빗나갔습니다! 다시 생각해보세요.');
+        setTimeout(() => btn.classList.remove('wrong'), 800);
+      }
+    }
+
+    btnResumeClimb.addEventListener('click', () => {
+      battleModal.classList.remove('open');
+      state.status = 'CLIMBING';
+      state.lastTickTime = Date.now();
+      state.battleSecondsAccumulator = 0;
+      state.nextBattleInterval = 15 + Math.random() * 5; // next battle in 15-20s
+
+      if (state.bgmEnabled) {
+        bgm.start('climb'); // Back to relaxing Lo-Fi chill 노동요!
+      }
+      saveSession();
+      syncUI();
+      showToast('산행을 재개합니다. 평온한 집중의 시간입니다. 🥾');
+    });
+
+    /* ==========================================================
+       4. Local Storage & Dates
+       ========================================================== */
+    function getTodayKey() {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+
+    function getFormattedKoreanDate() {
+      const now = new Date();
+      const days = ['일', '월', '화', '수', '목', '금', '토'];
+      return `${now.getMonth() + 1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+    }
+
+    function loadRecords() {
+      const today = getTodayKey();
+      state.todayDate = today;
+      currentDateLabel.textContent = getFormattedKoreanDate();
+
+      try {
+        const savedName = localStorage.getItem('deepwork_mountain_name');
+        if (savedName) state.mountainName = savedName;
+        if (mountainTitle) mountainTitle.textContent = state.mountainName;
+        
+        const savedBgm = localStorage.getItem('deepwork_bgm_enabled');
+        if (savedBgm !== null) state.bgmEnabled = (savedBgm === 'true');
+      } catch (e) {}
+      
+      const now = new Date();
+      recordDateStamp.textContent = `${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+
+      try {
+        const raw = localStorage.getItem(RECORDS_KEY);
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (data.date === today) {
+            state.todayCompletedCount = data.completedCount || 0;
+            state.todayTotalSeconds = data.totalSeconds || 0;
+          } else {
+            state.todayCompletedCount = 0;
+            state.todayTotalSeconds = 0;
+            saveRecords();
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const savedSession = localStorage.getItem(STORAGE_KEY);
+        if (savedSession) {
+          const parsed = JSON.parse(savedSession);
+          if (parsed.todayDate === today && parsed.elapsedSeconds > 0) {
+            state.elapsedSeconds = Math.min(parsed.elapsedSeconds, TARGET_SECONDS);
+            state.status = (state.elapsedSeconds >= TARGET_SECONDS) ? 'SUMMIT' : 'RESTING';
+          }
+        }
+      } catch (e) {}
+
+      updateBadges();
+    }
+
+    function saveRecords() {
+      const data = {
+        date: state.todayDate,
+        completedCount: state.todayCompletedCount,
+        totalSeconds: state.todayTotalSeconds
+      };
+      try { localStorage.setItem(RECORDS_KEY, JSON.stringify(data)); } catch (e) {}
+    }
+
+    function saveSession() {
+      const data = {
+        todayDate: state.todayDate,
+        elapsedSeconds: state.elapsedSeconds,
+        status: state.status
+      };
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+    }
+
+    function updateBadges() {
+      todayClimbCount.textContent = `${state.todayCompletedCount}회`;
+      const hrs = Math.floor(state.todayTotalSeconds / 3600);
+      const mins = Math.floor((state.todayTotalSeconds % 3600) / 60);
+      todayTotalFocus.textContent = `${hrs}h ${String(mins).padStart(2, '0')}m`;
+    }
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toastMsg.classList.add('show');
+      setTimeout(() => toastMsg.classList.remove('show'), 2200);
+    }
+
+    function formatTime(totalSec) {
+      const s = Math.floor(totalSec);
+      const hrs = Math.floor(s / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+      return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    /* ==========================================================
+       5. UI State Synchronization
+       ========================================================== */
+    function syncUI() {
+      timerDisplay.textContent = formatTime(state.elapsedSeconds);
+
+      const ratio = Math.min(1, state.elapsedSeconds / TARGET_SECONDS);
+      const percent = Math.floor(ratio * 100);
+      progressBarFill.style.width = `${percent}%`;
+      percentText.textContent = `진행률 ${percent}%`;
+
+      const currentAlt = Math.round(ratio * MAX_ALTITUDE);
+      altitudeText.textContent = `${currentAlt.toLocaleString()}m`;
+
+      const remainingSec = Math.max(0, TARGET_SECONDS - state.elapsedSeconds);
+      const remHrs = Math.floor(remainingSec / 3600);
+      const remMins = Math.floor((remainingSec % 3600) / 60);
+
+      if (ratio >= 1) {
+        remainingTimeText.textContent = `${state.mountainName} 1,950m 정상 완등 달성`;
+      } else {
+        remainingTimeText.textContent = `정상까지 ${remHrs}시간 ${String(remMins).padStart(2, '0')}분 남음`;
+      }
+
+      // Checkpoints
+      if (ratio >= 1.0) {
+        checkpointHud.textContent = `정상: ${state.mountainName} 완등 표지석 (1,950m)`;
+      } else if (ratio >= 0.75) {
+        checkpointHud.textContent = '구간: 숨가쁜 바위 능선 (75%)';
+      } else if (ratio >= 0.5) {
+        checkpointHud.textContent = '구간: 맑은 약수터 쉼터 (50%)';
+      } else if (ratio >= 0.25) {
+        checkpointHud.textContent = '구간: 솔바람 울창한 숲길 (25%)';
+      } else {
+        checkpointHud.textContent = '기점: 베이스캠프 출발선';
+      }
+
+      // Update milestone nodes
+      const steps = [0, 0.25, 0.5, 0.75, 1.0];
+      milestoneNodes.forEach((node, idx) => {
+        node.className = 'milestone-node';
+        if (ratio >= steps[idx]) {
+          node.classList.add('passed');
+        }
+        if (Math.abs(ratio - steps[idx]) < 0.12) {
+          node.classList.add('active');
+        }
+      });
+
+      // Status Stamp & Main CTA
+      statusStamp.className = 'status-stamp';
+      if (state.status === 'CLIMBING') {
+        statusStamp.classList.add('climbing');
+        statusStamp.innerHTML = `<span>산행 중</span>`;
+
+        toggleHikeBtn.className = 'btn-act btn-primary-rest';
+        toggleHikeIcon.textContent = '☕';
+        toggleHikeText.textContent = '잠시 쉬어가기';
+      } else if (state.status === 'RESTING') {
+        statusStamp.classList.add('resting');
+        statusStamp.innerHTML = `<span>쉼터 휴식</span>`;
+
+        toggleHikeBtn.className = 'btn-act btn-primary-climb';
+        toggleHikeIcon.textContent = '🥾';
+        toggleHikeText.textContent = '산행 계속하기';
+      } else if (state.status === 'SUMMIT') {
+        statusStamp.classList.add('summit');
+        statusStamp.innerHTML = `<span>정상 도달</span>`;
+
+        toggleHikeBtn.className = 'btn-act btn-primary-climb';
+        toggleHikeIcon.textContent = '🥾';
+        toggleHikeText.textContent = '새로운 산행 시작';
+      } else if (state.status === 'BATTLE') {
+        statusStamp.innerHTML = `<span>⚔️ 전투 중</span>`;
+        statusStamp.style.background = 'rgba(239, 68, 68, 0.25)';
+        statusStamp.style.color = '#f87171';
+        statusStamp.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+
+        checkpointHud.textContent = `⚔️ 전투: ${state.currentMonster ? state.currentMonster.name : '야생 몬스터'}와 상식 대결 중!`;
+        toggleHikeBtn.className = 'btn-act btn-primary-rest';
+        toggleHikeIcon.textContent = '⚔️';
+        toggleHikeText.textContent = '전투 진행 중';
+      } else {
+        statusStamp.innerHTML = `<span>출발 대기</span>`;
+        toggleHikeBtn.className = 'btn-act btn-primary-climb';
+        toggleHikeIcon.textContent = '🥾';
+        toggleHikeText.textContent = '등산 시작';
+      }
+
+      // Complete button styling
+      if (ratio >= 1.0) {
+        completeHikeBtn.classList.add('summit-ready');
+        completeHikeIcon.textContent = '🏆';
+        completeHikeText.textContent = '천왕봉 완등 깃발 꽂기';
+      } else {
+        completeHikeBtn.classList.remove('summit-ready');
+        completeHikeIcon.textContent = '🚩';
+        completeHikeText.textContent = '오늘의 산행 일지 기록';
+      }
+    }
+
+    /* ==========================================================
+       6. Atmospheric Cartographic Canvas Engine
+       ========================================================== */
+    let animTime = 0;
+    let confettiList = [];
+
+    function spawnSummitSparks(cx, cy) {
+      confettiList = [];
+      const sparkColors = ['#d4a359', '#f1f5f9', '#299b6f', '#de6e43', '#e2e8f0'];
+      for (let i = 0; i < 60; i++) {
+        confettiList.push({
+          x: cx,
+          y: cy,
+          vx: (Math.random() - 0.5) * 6,
+          vy: -Math.random() * 6 - 2,
+          size: Math.random() * 4 + 2,
+          color: sparkColors[Math.floor(Math.random() * sparkColors.length)],
+          alpha: 1.0,
+          decay: Math.random() * 0.018 + 0.01
+        });
+      }
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    // Trail curve coordinates
+    function getPathCoordinates(t, width, height) {
+      const p0 = { x: width * 0.12, y: height * 0.88 }; // Camp
+      const p1 = { x: width * 0.38, y: height * 0.76 };
+      const p2 = { x: width * 0.22, y: height * 0.62 }; // Rock
+      const p3 = { x: width * 0.58, y: height * 0.52 }; // Shelter
+      const p4 = { x: width * 0.44, y: height * 0.38 }; // Ridge
+      const p5 = { x: width * 0.78, y: height * 0.24 }; // Summit
+
+      if (t <= 0.33) {
+        return getQuadBezier(t / 0.33, p0, p1, p2);
+      } else if (t <= 0.66) {
+        return getQuadBezier((t - 0.33) / 0.33, p2, p3, p4);
+      } else {
+        return getQuadBezier((t - 0.66) / 0.34, p4, { x: width * 0.64, y: height * 0.28 }, p5);
+      }
+    }
+
+    function getQuadBezier(u, a, b, c) {
+      const mu = 1 - u;
+      return {
+        x: mu * mu * a.x + 2 * mu * u * b.x + u * u * c.x,
+        y: mu * mu * a.y + 2 * mu * u * b.y + u * u * c.y
+      };
+    }
+
+    function drawScene() {
+      const dpr = window.devicePixelRatio || 1;
+      const width = canvas.width / dpr;
+      const height = canvas.height / dpr;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const ratio = Math.min(1, state.elapsedSeconds / TARGET_SECONDS);
+
+      // --- 1. Natural Mountain Atmosphere Sky ---
+      let skyStart, skyEnd;
+      if (ratio < 0.25) {
+        // Crisp early morning dawn
+        skyStart = '#0f171e';
+        skyEnd = '#1c2e38';
+      } else if (ratio < 0.70) {
+        // Calm alpine slate midday
+        skyStart = '#112230';
+        skyEnd = '#244558';
+      } else if (ratio < 0.95) {
+        // Muted alpine sunset
+        skyStart = '#1b1b2f';
+        skyEnd = '#5c3532';
+      } else {
+        // Deep granite night with stars
+        skyStart = '#0a0d13';
+        skyEnd = '#261b2c';
+      }
+
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
+      skyGrad.addColorStop(0, skyStart);
+      skyGrad.addColorStop(1, skyEnd);
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Ambient celestial body (sun/moon)
+      const sunX = width * 0.74 - ratio * (width * 0.45);
+      const sunY = height * 0.20 + Math.sin(ratio * Math.PI) * -12;
+      const sunGrad = ctx.createRadialGradient(sunX, sunY, 3, sunX, sunY, 36);
+      sunGrad.addColorStop(0, 'rgba(255, 248, 235, 0.85)');
+      sunGrad.addColorStop(0.3, 'rgba(212, 163, 89, 0.25)');
+      sunGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = sunGrad;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 36, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Soft topographical elevation lines in the background
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+      ctx.lineWidth = 1;
+      for (let i = 1; i <= 3; i++) {
+        ctx.beginPath();
+        ctx.arc(width * 0.78, height * 0.24, i * 42, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // --- 2. Distant Jagged Peaks (Layer 1) ---
+      ctx.fillStyle = 'rgba(18, 26, 34, 0.82)';
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      ctx.lineTo(0, height * 0.58);
+      ctx.lineTo(width * 0.24, height * 0.36);
+      ctx.lineTo(width * 0.50, height * 0.50);
+      ctx.lineTo(width * 0.78, height * 0.23); // Summit
+      ctx.lineTo(width, height * 0.42);
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fill();
+
+      // --- 3. Midground Rocky Ridge with Granite Shading (Layer 2) ---
+      ctx.fillStyle = '#17232d';
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      ctx.lineTo(0, height * 0.70);
+      ctx.lineTo(width * 0.32, height * 0.48);
+      ctx.lineTo(width * 0.60, height * 0.56);
+      ctx.lineTo(width * 0.78, height * 0.24); // Summit point
+      ctx.lineTo(width * 0.86, height * 0.36);
+      ctx.lineTo(width, height * 0.52);
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fill();
+
+      // Cheonwangbong Peak Monument & Contour Highlight
+      ctx.fillStyle = 'rgba(241, 245, 249, 0.25)';
+      ctx.beginPath();
+      ctx.moveTo(width * 0.75, height * 0.28);
+      ctx.lineTo(width * 0.78, height * 0.24);
+      ctx.lineTo(width * 0.81, height * 0.29);
+      ctx.closePath();
+      ctx.fill();
+
+      // --- 4. Foreground Slopes & Deep Pine Silhouettes ---
+      ctx.fillStyle = '#141c22';
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      ctx.lineTo(0, height * 0.80);
+      ctx.bezierCurveTo(width * 0.28, height * 0.72, width * 0.44, height * 0.84, width * 0.68, height * 0.68);
+      ctx.bezierCurveTo(width * 0.80, height * 0.58, width * 0.90, height * 0.46, width, height * 0.48);
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fill();
+
+      // Subtle alpine pines
+      drawPineSilhouette(width * 0.08, height * 0.84, 22, '#0c1318');
+      drawPineSilhouette(width * 0.16, height * 0.81, 26, '#0f171d');
+      drawPineSilhouette(width * 0.28, height * 0.74, 18, '#131d24');
+      drawPineSilhouette(width * 0.46, height * 0.65, 17, '#16222b');
+      drawPineSilhouette(width * 0.66, height * 0.56, 14, '#1a2731');
+
+      // --- 5. The Tactile Cartographic Trail ---
+      ctx.save();
+      ctx.strokeStyle = 'rgba(212, 163, 89, 0.4)';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([3, 4]);
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      const nSteps = 50;
+      for (let i = 0; i <= nSteps; i++) {
+        const pt = getPathCoordinates(i / nSteps, width, height);
+        if (i === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Completed Path Trail
+      if (ratio > 0.005) {
+        ctx.save();
+        ctx.strokeStyle = '#299b6f';
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        const curCount = Math.max(2, Math.floor(nSteps * ratio));
+        for (let i = 0; i <= curCount; i++) {
+          const pt = getPathCoordinates((i / nSteps) * ratio * (nSteps / curCount), width, height);
+          if (i === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // --- 6. Trail Station Waypoint Markers ---
+      const stations = [0.0, 0.25, 0.5, 0.75, 1.0];
+      stations.forEach((st) => {
+        const pt = getPathCoordinates(st, width, height);
+        const reached = ratio >= st;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, reached ? 4 : 3, 0, Math.PI * 2);
+        ctx.fillStyle = reached ? '#299b6f' : 'rgba(255, 255, 255, 0.3)';
+        ctx.fill();
+
+        if (st === 1.0) {
+          drawSummitBeacon(pt.x, pt.y, ratio >= 1.0);
+        }
+      });
+
+      // --- 7. Thoughtfully Animated Mountaineer ---
+      const hikerPos = getPathCoordinates(ratio, width, height);
+      drawMountaineer(hikerPos.x, hikerPos.y, state.status, animTime);
+
+      // --- 8. Summit Sparkles ---
+      if (confettiList.length > 0) {
+        for (let i = confettiList.length - 1; i >= 0; i--) {
+          const sp = confettiList[i];
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.vy += 0.18;
+          sp.alpha -= sp.decay;
+          if (sp.alpha <= 0) {
+            confettiList.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.globalAlpha = sp.alpha;
+          ctx.fillStyle = sp.color;
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // Red tension warning border during battle
+      if (state.status === 'BATTLE') {
+        const pulse = 0.4 + Math.sin(animTime * 0.15) * 0.3;
+        ctx.strokeStyle = `rgba(239, 68, 68, ${pulse})`;
+        ctx.lineWidth = 3.5;
+        ctx.strokeRect(2, 2, width - 4, height - 4);
+      }
+    }
+
+    function drawPineSilhouette(x, y, height, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x, y - height);
+      ctx.lineTo(x - height * 0.38, y);
+      ctx.lineTo(x + height * 0.38, y);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawSummitBeacon(x, y, isFinished) {
+      ctx.save();
+      // Stone monument
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(x - 5, y - 6, 10, 7);
+      
+      // Marker pole
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y - 6);
+      ctx.lineTo(x, y - 26);
+      ctx.stroke();
+
+      // Flag
+      ctx.fillStyle = isFinished ? '#c85a32' : '#64748b';
+      ctx.beginPath();
+      ctx.moveTo(x, y - 26);
+      ctx.lineTo(x + 14, y - 20);
+      ctx.lineTo(x, y - 14);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawMountaineer(x, y, status, time) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      if (status === 'RESTING') {
+        // Resting posture on trail rock
+        const breath = Math.sin(time * 0.06) * 1.2;
+
+        // Slate rest stone
+        ctx.fillStyle = '#334155';
+        ctx.beginPath();
+        ctx.ellipse(0, 3, 10, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Seated body
+        ctx.fillStyle = '#1d7452'; // Evergreen parka
+        ctx.beginPath();
+        ctx.roundRect(-4, -11 + breath * 0.4, 8, 9, 2);
+        ctx.fill();
+
+        // Pack leaning on stone
+        ctx.fillStyle = '#c85a32'; // Terracotta gear pack
+        ctx.beginPath();
+        ctx.roundRect(4, -8, 6, 8, 2);
+        ctx.fill();
+
+        // Head & Beanie
+        ctx.fillStyle = '#d4a359'; // Brass ochre knit cap
+        ctx.beginPath();
+        ctx.arc(0, -15 + breath * 0.4, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Warm insulated tumbler
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fillRect(-6, -7, 3, 4);
+
+        // Subtle warm vapor
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        const vapor = (time * 0.07) % 5;
+        ctx.moveTo(-4.5, -9 - vapor);
+        ctx.lineTo(-4.5, -13 - vapor);
+        ctx.stroke();
+
+      } else if (status === 'SUMMIT') {
+        // Summit stance: Arms raised in peaceful accomplishment
+        const sway = Math.sin(time * 0.08) * 1.5;
+
+        // Legs
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(-3, 0);
+        ctx.lineTo(-3, -7);
+        ctx.moveTo(3, 0);
+        ctx.lineTo(3, -7);
+        ctx.stroke();
+
+        // Body
+        ctx.fillStyle = '#1d7452';
+        ctx.fillRect(-5, -16, 10, 10);
+
+        // Raised arms
+        ctx.strokeStyle = '#1d7452';
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(-5, -12);
+        ctx.lineTo(-10, -20 + sway);
+        ctx.moveTo(5, -12);
+        ctx.lineTo(10, -20 - sway);
+        ctx.stroke();
+
+        // Head
+        ctx.fillStyle = '#d4a359';
+        ctx.beginPath();
+        ctx.arc(0, -19, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+
+      } else if (status === 'BATTLE') {
+        // Combat Stance: Ready to strike with trekking pole
+        const battlePulse = Math.sin(time * 0.22) * 1.5;
+
+        // Legs in defensive martial stance
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2.4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(-2, -7);
+        ctx.lineTo(-6, 0);
+        ctx.moveTo(2, -7);
+        ctx.lineTo(6, 0);
+        ctx.stroke();
+
+        // Pack
+        ctx.fillStyle = '#c85a32';
+        ctx.beginPath();
+        ctx.roundRect(-9, -16 + battlePulse * 0.5, 5, 9, 2);
+        ctx.fill();
+
+        // Body
+        ctx.fillStyle = '#1d7452';
+        ctx.beginPath();
+        ctx.roundRect(-4, -16 + battlePulse * 0.5, 8, 10, 2);
+        ctx.fill();
+
+        // Head & Beanie
+        ctx.fillStyle = '#d4a359';
+        ctx.beginPath();
+        ctx.arc(0, -20 + battlePulse * 0.5, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Trekking Pole held forward like a staff/spear
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-1, -11 + battlePulse);
+        ctx.lineTo(16, -7 + battlePulse);
+        ctx.stroke();
+
+        // Draw Monster Facing the Hiker on the trail
+        if (state.currentMonster) {
+          ctx.save();
+          const monsterBob = Math.sin(time * 0.25) * 2.5;
+
+          // Shadow under monster
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+          ctx.beginPath();
+          ctx.ellipse(32, 1, 9, 3.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Monster emoji
+          ctx.font = '22px serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(state.currentMonster.avatar, 32, -6 + monsterBob);
+
+          // Red danger exclamation mark
+          ctx.fillStyle = '#ef4444';
+          ctx.font = 'bold 12px monospace';
+          ctx.fillText('!', 32, -26 + monsterBob);
+          ctx.restore();
+        }
+
+      } else {
+        // Active Hiking Cadence
+        const isWalking = (status === 'CLIMBING');
+        const stride = isWalking ? Math.sin(time * 0.16) * 4.5 : 0;
+        const bob = isWalking ? Math.abs(Math.cos(time * 0.16)) * 1.8 : 0;
+
+        // Trekking pole
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        const poleOffset = isWalking ? Math.cos(time * 0.16) * 3 : 0;
+        ctx.moveTo(5 + poleOffset, -10 - bob);
+        ctx.lineTo(8 + poleOffset, 2);
+        ctx.stroke();
+
+        // Legs
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2.4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(-1, -7 - bob);
+        ctx.lineTo(-3 + stride, 0);
+        ctx.moveTo(1, -7 - bob);
+        ctx.lineTo(3 - stride, 0);
+        ctx.stroke();
+
+        // Mountain pack
+        ctx.fillStyle = '#c85a32';
+        ctx.beginPath();
+        ctx.roundRect(-8, -16 - bob, 5, 9, 2);
+        ctx.fill();
+
+        // Body / Parka
+        ctx.fillStyle = '#1d7452';
+        ctx.beginPath();
+        ctx.roundRect(-4, -16 - bob, 8, 10, 2);
+        ctx.fill();
+
+        // Head & Beanie
+        ctx.fillStyle = '#d4a359';
+        ctx.beginPath();
+        ctx.arc(0, -20 - bob, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    /* ==========================================================
+       7. Chronometer Loop
+       ========================================================== */
+    function animate() {
+      animTime += 1;
+
+      if (state.status === 'CLIMBING') {
+        const now = Date.now();
+        if (!state.lastTickTime) state.lastTickTime = now;
+        const delta = now - state.lastTickTime;
+        state.lastTickTime = now;
+
+        const deltaSec = (delta / 1000) * state.speedMultiplier;
+        state.elapsedSeconds += deltaSec;
+        state.todayTotalSeconds += deltaSec;
+
+        // Monster Encounter timer: 15-20 seconds interval
+        state.battleSecondsAccumulator += deltaSec;
+        if (state.battleSecondsAccumulator >= state.nextBattleInterval) {
+          state.battleSecondsAccumulator = 0;
+          state.nextBattleInterval = 15 + Math.random() * 5; // 15 to 20 seconds
+          triggerMonsterEncounter();
+        }
+
+        if (state.elapsedSeconds >= TARGET_SECONDS) {
+          state.elapsedSeconds = TARGET_SECONDS;
+          completeHike(true);
+        }
+
+        if (animTime % 180 === 0) {
+          saveSession();
+          saveRecords();
+          updateBadges();
+        }
+
+        syncUI();
+      } else {
+        state.lastTickTime = null;
+      }
+
+      drawScene();
+      requestAnimationFrame(animate);
+    }
+
+    /* ==========================================================
+       8. User Controls
+       ========================================================== */
+    toggleHikeBtn.addEventListener('click', () => {
+      getAudioContext();
+
+      if (state.status === 'BATTLE') {
+        battleModal.classList.add('open');
+        showToast('⚔️ 먼저 몬스터를 물리쳐야 산행을 이어갈 수 있습니다!');
+        return;
+      }
+
+      if (state.status === 'IDLE' || state.status === 'RESTING') {
+        state.status = 'CLIMBING';
+        state.lastTickTime = Date.now();
+        chimeStart();
+        if (state.bgmEnabled) bgm.start('climb');
+        showToast('산행을 시작합니다. 깊은 몰입의 시간입니다.');
+      } else if (state.status === 'CLIMBING') {
+        state.status = 'RESTING';
+        chimeRest();
+        if (state.bgmEnabled) bgm.start('rest');
+        showToast('쉼터에서 숨을 고릅니다. 충분히 쉬어가세요.');
+      } else if (state.status === 'SUMMIT') {
+        state.elapsedSeconds = 0;
+        state.status = 'CLIMBING';
+        state.lastTickTime = Date.now();
+        chimeStart();
+        if (state.bgmEnabled) bgm.start('climb');
+        showToast('새로운 산행길을 향해 출발합니다.');
+      }
+
+      saveSession();
+      syncUI();
+    });
+
+    function completeHike(auto = false) {
+      state.status = 'SUMMIT';
+      state.todayCompletedCount += 1;
+      bgm.stop(1.2);
+
+      saveRecords();
+      saveSession();
+      updateBadges();
+      syncUI();
+
+      const dpr = window.devicePixelRatio || 1;
+      spawnSummitSparks((canvas.width / dpr) * 0.78, (canvas.height / dpr) * 0.24);
+      chimeSummit();
+
+      modalFocusTime.textContent = formatTime(state.elapsedSeconds);
+      modalClimbCount.textContent = `${state.todayCompletedCount}회`;
+
+      if (state.elapsedSeconds >= TARGET_SECONDS) {
+        modalTitle.textContent = `${state.mountainName} 완등 달성 🏆`;
+        modalDesc.innerHTML = `목표 4시간의 깊은 집중 산행을 무사히 마쳤습니다.<br/>${state.mountainName} 정상에 깃발을 꽂고 일지에 기록했습니다.`;
+      } else {
+        modalTitle.textContent = '산행 일지 기록 완료 🚩';
+        modalDesc.innerHTML = `현재까지 오른 고도와 집중 시간(${formatTime(state.elapsedSeconds)})이<br/>오늘의 산행 일지에 안전하게 보관되었습니다.`;
+      }
+
+      celebrationModal.classList.add('open');
+    }
+
+    completeHikeBtn.addEventListener('click', () => {
+      getAudioContext();
+      if (state.elapsedSeconds < 60) {
+        showToast('1분 이상 산행(집중) 후 일지에 기록할 수 있습니다.');
+        return;
+      }
+      completeHike(false);
+    });
+
+    modalCloseBtn.addEventListener('click', () => {
+      celebrationModal.classList.remove('open');
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (state.elapsedSeconds > 0) {
+        const ok = confirm('현재 진행 중인 산행 시간을 초기화하시겠습니까?');
+        if (!ok) return;
+      }
+      if (battleModal) battleModal.classList.remove('open');
+      state.battleSecondsAccumulator = 0;
+      bgm.stop(0.6);
+      state.status = 'IDLE';
+      state.elapsedSeconds = 0;
+      saveSession();
+      syncUI();
+      showToast('산행 타이머가 초기화되었습니다.');
+    });
+
+    bgmBtn.addEventListener('click', () => {
+      getAudioContext();
+      state.bgmEnabled = !state.bgmEnabled;
+      try { localStorage.setItem('deepwork_bgm_enabled', state.bgmEnabled); } catch (e) {}
+
+      if (state.bgmEnabled) {
+        if (state.status === 'CLIMBING') {
+          bgm.start('climb');
+        } else if (state.status === 'RESTING') {
+          bgm.start('rest');
+        } else if (state.status === 'BATTLE') {
+          bgm.start('battle');
+        }
+        showToast('🎧 Lo-Fi Chill 노동요가 켜졌습니다.');
+      } else {
+        bgm.stop(0.5);
+        showToast('🔇 Lo-Fi Chill 노동요가 꺼졌습니다.');
+      }
+      updateBgmUI();
+    });
+
+    soundBtn.addEventListener('click', () => {
+      state.soundEnabled = !state.soundEnabled;
+      soundIcon.textContent = state.soundEnabled ? '🔊' : '🔇';
+      soundBtn.classList.toggle('active', !state.soundEnabled);
+      showToast(state.soundEnabled ? '효과음이 켜졌습니다.' : '효과음이 음소거되었습니다.');
+    });
+
+    function changeMountainName() {
+      const newName = prompt('등반할 산의 이름을 입력하세요:', state.mountainName);
+      if (newName && newName.trim()) {
+        state.mountainName = newName.trim();
+        if (mountainTitle) mountainTitle.textContent = state.mountainName;
+        localStorage.setItem('deepwork_mountain_name', state.mountainName);
+        syncUI();
+        showToast(`산 이름이 '${state.mountainName}'(으)로 변경되었습니다.`);
+      }
+    }
+    if (mountainTitle) mountainTitle.addEventListener('click', changeMountainName);
+    if (editTitleBtn) editTitleBtn.addEventListener('click', changeMountainName);
+
+    speedTestBtn.addEventListener('click', () => {
+      if (state.speedMultiplier === 1) {
+        state.speedMultiplier = 60; // 1s = 1m
+        speedTestBtn.classList.add('active');
+        showToast('⚡ 60배속 테스트 모드가 활성화되었습니다.');
+      } else {
+        state.speedMultiplier = 1;
+        speedTestBtn.classList.remove('active');
+        showToast('표준 1배속 모드로 돌아왔습니다.');
+      }
+    });
+
+    /* ==========================================================
+       9. Bootstrap
+       ========================================================== */
+    function init() {
+      loadRecords();
+      resizeCanvas();
+      syncUI();
+      updateBgmUI();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
